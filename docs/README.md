@@ -1,0 +1,1 @@
+# [![](http://cf.way2muchnoise.eu/versions/*.svg)](https://minecraft.curseforge.com/projects/*) [![](http://cf.way2muchnoise.eu/short_*_downloads.svg)](https://minecraft.curseforge.com/projects/*/files) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "cosmeticbeds",
+  "name": "Cosmetic Beds",
+  "description": "Allows players to add banner patterns to their beds!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["C4"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
