@@ -21,16 +21,11 @@ package c4.cosmeticbeds.common.tileentity;
 
 import c4.cosmeticbeds.common.item.ItemCosmeticBed;
 import com.google.common.collect.Lists;
-import net.minecraft.block.BlockBed;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.tileentity.TileEntityBed;
 import net.minecraftforge.fml.relauncher.Side;

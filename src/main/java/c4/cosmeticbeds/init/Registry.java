@@ -20,10 +20,10 @@
 package c4.cosmeticbeds.init;
 
 import c4.cosmeticbeds.CosmeticBeds;
-import c4.cosmeticbeds.common.recipe.BedPatternRecipe;
-import c4.cosmeticbeds.common.recipe.BedUnpatternRecipe;
 import c4.cosmeticbeds.common.block.BlockCosmeticBed;
 import c4.cosmeticbeds.common.item.ItemCosmeticBed;
+import c4.cosmeticbeds.common.recipe.BedPatternRecipe;
+import c4.cosmeticbeds.common.recipe.BedUnpatternRecipe;
 import c4.cosmeticbeds.common.tileentity.TileEntityCosmeticBed;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

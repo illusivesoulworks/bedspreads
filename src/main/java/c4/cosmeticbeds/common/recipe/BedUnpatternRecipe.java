@@ -21,7 +21,6 @@ package c4.cosmeticbeds.common.recipe;
 
 import c4.cosmeticbeds.CosmeticBeds;
 import c4.cosmeticbeds.init.Registry;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemBanner;
@@ -31,7 +30,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
