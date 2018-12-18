@@ -24,6 +24,7 @@ import c4.cosmeticbeds.common.tileentity.TileEntityCosmeticBed;
 import net.minecraft.client.model.ModelBed;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,6 +35,7 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 public class TileEntityCosmeticBedRenderer extends TileEntitySpecialRenderer<TileEntityCosmeticBed> {
 
+    private static final ResourceLocation[] TEXTURES;
     private ModelBed model = new ModelBed();
     private int version;
 
@@ -50,6 +52,7 @@ public class TileEntityCosmeticBedRenderer extends TileEntitySpecialRenderer<Til
         }
         boolean flag = te.getWorld() != null;
         boolean flag1 = !flag || te.isHeadPiece();
+        EnumDyeColor enumdyecolor = te != null ? te.getColor() : EnumDyeColor.RED;
         int i = flag ? te.getBlockMetadata() & 3 : 0;
 
         if (destroyStage >= 0) {
@@ -64,6 +67,13 @@ public class TileEntityCosmeticBedRenderer extends TileEntitySpecialRenderer<Til
 
             if (resourcelocation != null) {
                 this.bindTexture(resourcelocation);
+            } else {
+                resourcelocation = TEXTURES[enumdyecolor.getMetadata()];
+
+                if (resourcelocation != null)
+                {
+                    this.bindTexture(resourcelocation);
+                }
             }
         }
 
@@ -118,5 +128,16 @@ public class TileEntityCosmeticBedRenderer extends TileEntitySpecialRenderer<Til
     private ResourceLocation getPatternResourceLocation(TileEntityCosmeticBed bed) {
         return BedTextures.BED_DESIGNS.getResourceLocation(bed.getPatternResourceLocation(), bed.getBaseColor(), bed
                         .getPatternList(), bed.getColorList());
+    }
+
+    static
+    {
+        EnumDyeColor[] aenumdyecolor = EnumDyeColor.values();
+        TEXTURES = new ResourceLocation[aenumdyecolor.length];
+
+        for (EnumDyeColor enumdyecolor : aenumdyecolor)
+        {
+            TEXTURES[enumdyecolor.getMetadata()] = new ResourceLocation("textures/entity/bed/" + enumdyecolor.getDyeColorName() + ".png");
+        }
     }
 }

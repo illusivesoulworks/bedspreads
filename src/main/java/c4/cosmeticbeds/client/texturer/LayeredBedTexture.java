@@ -87,7 +87,15 @@ public class LayeredBedTexture extends AbstractTexture {
                         BufferedImage bufferedimage2 = TextureUtil.readBufferedImage(iresource1.getInputStream());
 
                         if (s != null) {
-                            iresource2 = resourceManager.getResource(new ResourceLocation(s));
+                            try {
+                                iresource2 = resourceManager.getResource(new ResourceLocation(s));
+                            } catch (IOException e) {
+                                LOGGER.error("Couldn't load layered image", e);
+                                iresource2 = null;
+                            }
+                        }
+
+                        if (iresource2 != null) {
                             BufferedImage bufferedimage3 = TextureUtil.readBufferedImage(iresource2.getInputStream());
 
                             if (bufferedimage3.getWidth() == bufferedimage.getWidth() && bufferedimage3.getHeight() == bufferedimage.getHeight() && bufferedimage3.getType() == 6) {
