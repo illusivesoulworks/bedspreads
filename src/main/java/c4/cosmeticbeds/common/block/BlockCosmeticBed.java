@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  C4
+ * Copyright (C) 2018-2019  C4
  *
  * This file is part of Cosmetic Beds, a mod made for Minecraft.
  *
