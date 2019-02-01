@@ -142,6 +142,6 @@ public class TileEntityCosmeticBed extends TileEntityBed {
     @Nonnull
     @Override
     public ItemStack getItemStack() {
-        return ItemCosmeticBed.makeCosmeticBed(this.patterns, this.getColor().getMetadata());
+        return ItemCosmeticBed.makeCosmeticBed(this.patterns, this.baseColor, this.getColor().getMetadata());
     }
 }

@@ -165,11 +165,13 @@ public class ItemCosmeticBed extends ItemBed {
         }
     }
 
-    public static ItemStack makeCosmeticBed(@Nullable NBTTagList patterns, int metadata) {
+    public static ItemStack makeCosmeticBed(@Nullable NBTTagList patterns, EnumDyeColor bannerBase, int metadata) {
         ItemStack itemstack = new ItemStack(Registry.COSMETIC_BED_ITEM, 1, metadata);
 
         if (patterns != null && !patterns.isEmpty()) {
-            itemstack.getOrCreateSubCompound("BlockEntityTag").setTag("Patterns", patterns.copy());
+            NBTTagCompound compound = itemstack.getOrCreateSubCompound("BlockEntityTag");
+            compound.setTag("Patterns", patterns.copy());
+            compound.setInteger("Base", bannerBase.getDyeDamage());
         }
         return itemstack;
     }
