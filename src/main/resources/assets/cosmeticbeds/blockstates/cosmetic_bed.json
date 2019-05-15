@@ -1,22 +1,5 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "cosmeticbeds:cosmetic_bed"
-  },
   "variants": {
-    "facing": {
-      "north":{},
-      "south":{},
-      "east":{},
-      "west":{}
-    },
-    "occupied": {
-      "true":{},
-      "false":{}
-    },
-    "part": {
-      "head":{},
-      "foot":{}
-    }
+    "": { "model": "cosmeticbeds:block/cosmetic_bed" }
   }
 }
