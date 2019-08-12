@@ -23,6 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.RecipeSerializers;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,7 +48,6 @@ public class CosmeticBeds {
     public CosmeticBeds() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(this::setup);
-        eventBus.addListener(this::clientSetup);
     }
 
     private void setup(final FMLCommonSetupEvent evt) {
@@ -55,8 +55,13 @@ public class CosmeticBeds {
         RecipeSerializers.register(BedRemovePatternRecipe.CRAFTING_REMOVE_PATTERN);
     }
 
-    private void clientSetup(final FMLClientSetupEvent evt) {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCosmeticBed.class, new TileEntityCosmeticBedRenderer());
+    @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientProxy {
+
+        @SubscribeEvent
+        public static void clientSetup(final FMLClientSetupEvent evt) {
+            ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCosmeticBed.class, new TileEntityCosmeticBedRenderer());
+        }
     }
 
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
