@@ -20,29 +20,28 @@
 package top.theillusivec4.cosmeticbeds.common;
 
 import com.google.common.collect.Lists;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.EnumDyeColor;
+import java.util.List;
+import javax.annotation.Nonnull;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.tileentity.TileEntity;
-
-import javax.annotation.Nonnull;
-import java.util.List;
 
 public class TileEntityCosmeticBed extends TileEntity {
 
     private ItemStack bed = ItemStack.EMPTY;
     private ItemStack banner = ItemStack.EMPTY;
-    private EnumDyeColor bedColor = EnumDyeColor.WHITE;
-    private EnumDyeColor bannerColor = EnumDyeColor.WHITE;
-    private NBTTagList patterns;
+    private DyeColor bedColor = DyeColor.WHITE;
+    private DyeColor bannerColor = DyeColor.WHITE;
+    private ListNBT patterns;
     private boolean patternDataSet;
     private List<BannerPattern> patternList;
-    private List<EnumDyeColor> colorList;
+    private List<DyeColor> colorList;
     private String patternResourceLocation;
 
     public TileEntityCosmeticBed() {
@@ -51,25 +50,26 @@ public class TileEntityCosmeticBed extends TileEntity {
 
     public void loadFromItemStack(ItemStack stack) {
         this.patterns = null;
-        NBTTagCompound nbttagcompound = stack.getChildTag("BlockEntityTag");
+        CompoundNBT nbttagcompound = stack.getChildTag("BlockEntityTag");
 
         if (nbttagcompound != null) {
             this.bed = ItemStack.read(nbttagcompound.getCompound("BedStack"));
             this.banner = ItemStack.read(nbttagcompound.getCompound("BannerStack"));
 
             if (!this.bed.isEmpty()) {
-                this.bedColor = ItemCosmeticBed.getBedColor(this.bed);
+                this.bedColor = CosmeticBedItem.getBedColor(this.bed);
             }
 
             if (!this.banner.isEmpty()) {
-                this.bannerColor = ItemCosmeticBed.getBannerColor(this.banner);
+                this.bannerColor = CosmeticBedItem.getBannerColor(this.banner);
             }
         }
-        NBTTagCompound bannernbt = banner.getChildTag("BlockEntityTag");
+        CompoundNBT bannernbt = banner.getChildTag("BlockEntityTag");
 
         if (bannernbt != null && bannernbt.contains("Patterns", 9)) {
             this.patterns = bannernbt.getList("Patterns", 10).copy();
         }
+
         this.patternList = null;
         this.colorList = null;
         this.patternResourceLocation = "";
@@ -78,33 +78,35 @@ public class TileEntityCosmeticBed extends TileEntity {
 
     @Nonnull
     @Override
-    public NBTTagCompound write(NBTTagCompound compound) {
+    public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
 
         if (!this.bed.isEmpty()) {
-            compound.put("BedStack", this.bed.write(new NBTTagCompound()));
+            compound.put("BedStack", this.bed.write(new CompoundNBT()));
         }
 
         if (!this.banner.isEmpty()) {
-            compound.put("BannerStack", this.banner.write(new NBTTagCompound()));
+            compound.put("BannerStack", this.banner.write(new CompoundNBT()));
         }
         return compound;
     }
 
     @Override
-    public void read(NBTTagCompound compound) {
+    public void read(CompoundNBT compound) {
         super.read(compound);
         this.bed = compound.contains("BedStack") ? ItemStack.read(compound.getCompound("BedStack")) : ItemStack.EMPTY;
 
         if (!this.bed.isEmpty()) {
-            this.bedColor = ItemCosmeticBed.getBedColor(this.bed);
+            this.bedColor = CosmeticBedItem.getBedColor(this.bed);
         }
+
         this.banner = compound.contains("BannerStack") ? ItemStack.read(compound.getCompound("BannerStack")) : ItemStack.EMPTY;
 
         if (!this.banner.isEmpty()) {
-            this.bannerColor = ItemCosmeticBed.getBannerColor(this.banner);
+            this.bannerColor = CosmeticBedItem.getBannerColor(this.banner);
         }
-        NBTTagCompound bannernbt = banner.getChildTag("BlockEntityTag");
+
+        CompoundNBT bannernbt = banner.getChildTag("BlockEntityTag");
         this.patterns = bannernbt != null ? bannernbt.getList("Patterns", 10).copy() : null;
         this.patternList = null;
         this.colorList = null;
@@ -113,18 +115,18 @@ public class TileEntityCosmeticBed extends TileEntity {
     }
 
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, 11, this.getUpdateTag());
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.pos, 11, this.getUpdateTag());
     }
 
     @Nonnull
     @Override
-    public NBTTagCompound getUpdateTag() {
-        return this.write(new NBTTagCompound());
+    public CompoundNBT getUpdateTag() {
+        return this.write(new CompoundNBT());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
         this.read(pkt.getNbtCompound());
     }
 
@@ -133,7 +135,7 @@ public class TileEntityCosmeticBed extends TileEntity {
         return this.patternList;
     }
 
-    public List<EnumDyeColor> getColorList() {
+    public List<DyeColor> getColorList() {
         this.initializeBannerData();
         return this.colorList;
     }
@@ -152,7 +154,7 @@ public class TileEntityCosmeticBed extends TileEntity {
             } else {
                 this.patternList = Lists.newArrayList();
                 this.colorList = Lists.newArrayList();
-                EnumDyeColor enumdyecolor = this.getBannerColor();
+                DyeColor enumdyecolor = this.getBannerColor();
 
                 if (enumdyecolor == null) {
                     this.patternResourceLocation = "banner_missing";
@@ -163,12 +165,12 @@ public class TileEntityCosmeticBed extends TileEntity {
 
                     if (this.patterns != null) {
                         for(int i = 0; i < this.patterns.size(); ++i) {
-                            NBTTagCompound nbttagcompound = this.patterns.getCompound(i);
+                            CompoundNBT nbttagcompound = this.patterns.getCompound(i);
                             BannerPattern bannerpattern = BannerPattern.byHash(nbttagcompound.getString("Pattern"));
                             if (bannerpattern != null) {
                                 this.patternList.add(bannerpattern);
                                 int j = nbttagcompound.getInt("Color");
-                                this.colorList.add(EnumDyeColor.byId(j));
+                                this.colorList.add(DyeColor.byId(j));
                                 this.patternResourceLocation = this.patternResourceLocation + bannerpattern.getHashname() + j;
                             }
                         }
@@ -179,25 +181,26 @@ public class TileEntityCosmeticBed extends TileEntity {
         }
     }
 
-    public ItemStack getItem(IBlockState state) {
+    public ItemStack getItem(BlockState state) {
         ItemStack itemstack = new ItemStack(CosmeticBedsRegistry.COSMETIC_BED_ITEM);
-        NBTTagCompound compound = itemstack.getOrCreateChildTag("BlockEntityTag");
+        CompoundNBT compound = itemstack.getOrCreateChildTag("BlockEntityTag");
 
         if (!this.bed.isEmpty()) {
-            compound.put("BedStack", this.bed.write(new NBTTagCompound()));
+            compound.put("BedStack", this.bed.write(new CompoundNBT()));
         }
 
         if (!this.banner.isEmpty()) {
-            compound.put("BannerStack", this.banner.write(new NBTTagCompound()));
+            compound.put("BannerStack", this.banner.write(new CompoundNBT()));
         }
+
         return itemstack;
     }
 
-    public EnumDyeColor getBedColor() {
+    public DyeColor getBedColor() {
         return this.bedColor;
     }
 
-    public EnumDyeColor getBannerColor() {
+    public DyeColor getBannerColor() {
         return this.bannerColor;
     }
 }

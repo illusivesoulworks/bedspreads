@@ -33,9 +33,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.cosmeticbeds.client.renderer.TileEntityCosmeticBedRenderer;
-import top.theillusivec4.cosmeticbeds.common.BlockCosmeticBed;
+import top.theillusivec4.cosmeticbeds.common.CosmeticBedBlock;
 import top.theillusivec4.cosmeticbeds.common.CosmeticBedsRegistry;
-import top.theillusivec4.cosmeticbeds.common.ItemCosmeticBed;
+import top.theillusivec4.cosmeticbeds.common.CosmeticBedItem;
 import top.theillusivec4.cosmeticbeds.common.TileEntityCosmeticBed;
 import top.theillusivec4.cosmeticbeds.common.recipe.BedAddPatternRecipe;
 import top.theillusivec4.cosmeticbeds.common.recipe.BedRemovePatternRecipe;
@@ -69,12 +69,12 @@ public class CosmeticBeds {
 
         @SubscribeEvent
         public static void onBlockRegistry(final RegistryEvent.Register<Block> evt) {
-            evt.getRegistry().register(new BlockCosmeticBed());
+            evt.getRegistry().register(new CosmeticBedBlock());
         }
 
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> evt) {
-            evt.getRegistry().register(new ItemCosmeticBed());
+            evt.getRegistry().register(new CosmeticBedItem());
         }
 
         @SubscribeEvent

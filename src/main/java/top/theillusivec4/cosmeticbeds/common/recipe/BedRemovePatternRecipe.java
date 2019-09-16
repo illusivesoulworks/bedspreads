@@ -29,7 +29,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import top.theillusivec4.cosmeticbeds.CosmeticBeds;
-import top.theillusivec4.cosmeticbeds.common.ItemCosmeticBed;
+import top.theillusivec4.cosmeticbeds.common.CosmeticBedItem;
 
 import javax.annotation.Nonnull;
 
@@ -57,7 +57,7 @@ public class BedRemovePatternRecipe extends IRecipeHidden {
 
                 if (!stack.isEmpty()) {
 
-                    if (!itemstack.isEmpty() || !(stack.getItem() instanceof ItemCosmeticBed)) {
+                    if (!itemstack.isEmpty() || !(stack.getItem() instanceof CosmeticBedItem)) {
                         return false;
                     } else {
                         itemstack = stack.copy();
@@ -78,7 +78,7 @@ public class BedRemovePatternRecipe extends IRecipeHidden {
 
             if (!stack.isEmpty()) {
 
-                if (stack.getItem() instanceof ItemCosmeticBed) {
+                if (stack.getItem() instanceof CosmeticBedItem) {
                     itemstack = stack.copy();
                     break;
                 }
@@ -88,7 +88,7 @@ public class BedRemovePatternRecipe extends IRecipeHidden {
         if (itemstack.isEmpty()) {
             return ItemStack.EMPTY;
         } else {
-            return ItemCosmeticBed.getBannerStack(itemstack);
+            return CosmeticBedItem.getBannerStack(itemstack);
         }
     }
 
@@ -100,8 +100,8 @@ public class BedRemovePatternRecipe extends IRecipeHidden {
         for(int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack item = inv.getStackInSlot(i);
 
-            if (!item.isEmpty() && item.getItem() instanceof ItemCosmeticBed) {
-                nonnulllist.set(i, ItemCosmeticBed.getBedStack(item));
+            if (!item.isEmpty() && item.getItem() instanceof CosmeticBedItem) {
+                nonnulllist.set(i, CosmeticBedItem.getBedStack(item));
             }
         }
         return nonnulllist;

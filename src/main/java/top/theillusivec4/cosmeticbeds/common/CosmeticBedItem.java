@@ -19,15 +19,18 @@
 
 package top.theillusivec4.cosmeticbeds.common;
 
+import net.minecraft.block.AbstractBannerBlock;
+import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockAbstractBanner;
 import net.minecraft.block.BlockBed;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,17 +41,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCosmeticBed extends ItemBed {
+public class CosmeticBedItem extends BedItem {
 
-    public ItemCosmeticBed() {
+    public CosmeticBedItem() {
         super(CosmeticBedsRegistry.COSMETIC_BED_BLOCK, new Item.Properties().maxStackSize(1).setTEISR(() -> BedPatternItemStackRenderer::new));
         this.setRegistryName(CosmeticBedsRegistry.COSMETIC_BED_BLOCK.getRegistryName());
     }
 
     public static ItemStack getBedStack(ItemStack stack) {
 
-        if (stack.getItem() instanceof ItemCosmeticBed) {
-            NBTTagCompound compound = stack.getChildTag("BlockEntityTag");
+        if (stack.getItem() instanceof CosmeticBedItem) {
+            CompoundNBT compound = stack.getChildTag("BlockEntityTag");
 
             if (compound != null) {
                 return ItemStack.read(compound.getCompound("BedStack"));
@@ -57,18 +60,19 @@ public class ItemCosmeticBed extends ItemBed {
         return ItemStack.EMPTY;
     }
 
-    public static EnumDyeColor getBedColor(ItemStack stack) {
+    public static DyeColor getBedColor(ItemStack stack) {
 
-        if (!stack.isEmpty() && stack.getItem() instanceof ItemBed) {
-            return ObfuscationReflectionHelper.getPrivateValue(BlockBed.class, (BlockBed)((ItemBed)stack.getItem()).getBlock(), "field_196352_y");
+        if (!stack.isEmpty() && stack.getItem() instanceof BedItem) {
+            return ObfuscationReflectionHelper.getPrivateValue(BedBlock.class, (BedBlock) ((BedItem)stack.getItem()).getBlock(), "field_196352_y");
         }
-        return EnumDyeColor.WHITE;
+
+        return DyeColor.WHITE;
     }
 
     public static ItemStack getBannerStack(ItemStack stack) {
 
-        if (stack.getItem() instanceof ItemCosmeticBed) {
-            NBTTagCompound compound = stack.getChildTag("BlockEntityTag");
+        if (stack.getItem() instanceof CosmeticBedItem) {
+            CompoundNBT compound = stack.getChildTag("BlockEntityTag");
 
             if (compound != null) {
                 return ItemStack.read(compound.getCompound("BannerStack"));
@@ -77,12 +81,12 @@ public class ItemCosmeticBed extends ItemBed {
         return ItemStack.EMPTY;
     }
 
-    public static EnumDyeColor getBannerColor(ItemStack stack) {
+    public static DyeColor getBannerColor(ItemStack stack) {
 
-        if (!stack.isEmpty() && stack.getItem() instanceof ItemBanner) {
-            return ((BlockAbstractBanner)((ItemBanner)stack.getItem()).getBlock()).getColor();
+        if (!stack.isEmpty() && stack.getItem() instanceof BannerItem) {
+            return ((AbstractBannerBlock)((BannerItem)stack.getItem()).getBlock()).getColor();
         }
-        return EnumDyeColor.WHITE;
+        return DyeColor.WHITE;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -92,12 +96,12 @@ public class ItemCosmeticBed extends ItemBed {
         ItemStack banner = getBannerStack(stack);
 
         if (!bed.isEmpty()) {
-            tooltip.add(new TextComponentTranslation(bed.getTranslationKey()).applyTextStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent(bed.getTranslationKey()).applyTextStyle(TextFormatting.GRAY));
         }
 
         if (!banner.isEmpty()) {
-            tooltip.add(new TextComponentTranslation(banner.getTranslationKey()).applyTextStyle(TextFormatting.GRAY));
-            ItemBanner.appendHoverTextFromTileEntityTag(banner, tooltip);
+            tooltip.add(new TranslationTextComponent(banner.getTranslationKey()).applyTextStyle(TextFormatting.GRAY));
+            BannerItem.appendHoverTextFromTileEntityTag(banner, tooltip);
         }
     }
 }

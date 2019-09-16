@@ -19,33 +19,32 @@
 
 package top.theillusivec4.cosmeticbeds.common;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBed;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.BedPart;
-import net.minecraft.stats.StatList;
+import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import top.theillusivec4.cosmeticbeds.CosmeticBeds;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+public class CosmeticBedBlock extends BedBlock {
 
-public class BlockCosmeticBed extends BlockBed {
-
-    public BlockCosmeticBed() {
-        super(EnumDyeColor.WHITE, Block.Properties.create(Material.CLOTH).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
+    public CosmeticBedBlock() {
+        super(DyeColor.WHITE, Block.Properties.create(Material.WOOL).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
         this.setRegistryName(CosmeticBeds.MODID, "cosmetic_bed");
     }
 
@@ -55,17 +54,17 @@ public class BlockCosmeticBed extends BlockBed {
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, EntityPlayer player) {
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         TileEntity te = world.getTileEntity(pos);
         return te instanceof TileEntityCosmeticBed ? ((TileEntityCosmeticBed) te).getItem(state) : super.getPickBlock(state, target, world, pos, player);
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, @Nonnull EntityPlayer player) {
+    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, @Nonnull PlayerEntity player) {
         BedPart bedpart = state.get(PART);
         boolean flag = bedpart == BedPart.HEAD;
         BlockPos blockpos = pos.offset(getDirectionToOther(bedpart, state.get(HORIZONTAL_FACING)));
-        IBlockState iblockstate = worldIn.getBlockState(blockpos);
+        BlockState iblockstate = worldIn.getBlockState(blockpos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         TileEntity tileentityother = worldIn.getTileEntity(blockpos);
 
@@ -87,13 +86,13 @@ public class BlockCosmeticBed extends BlockBed {
                     }
                 }
             }
-            player.addStat(StatList.BLOCK_MINED.get(this));
+            player.addStat(Stats.BLOCK_MINED.get(this));
         }
         super.onBlockHarvested(worldIn, pos, state, player);
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable EntityLivingBase placer, @Nonnull ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         BlockPos blockpos = pos.offset(state.get(HORIZONTAL_FACING));
         worldIn.setBlockState(blockpos, state.with(PART, BedPart.HEAD), 3);
         worldIn.notifyNeighbors(pos, Blocks.AIR);
@@ -110,7 +109,7 @@ public class BlockCosmeticBed extends BlockBed {
         }
     }
 
-    private static EnumFacing getDirectionToOther(BedPart part, EnumFacing facing) {
+    private static Direction getDirectionToOther(BedPart part, Direction facing) {
         return part == BedPart.FOOT ? facing : facing.getOpposite();
     }
 }
