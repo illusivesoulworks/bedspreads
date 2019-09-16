@@ -19,106 +19,102 @@
 
 package top.theillusivec4.cosmeticbeds.common.recipe;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemBanner;
-import net.minecraft.item.ItemBed;
+import javax.annotation.Nonnull;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.BannerItem;
+import net.minecraft.item.BedItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeHidden;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeSerializers;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.crafting.SpecialRecipe;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import top.theillusivec4.cosmeticbeds.CosmeticBeds;
 import top.theillusivec4.cosmeticbeds.common.CosmeticBedsRegistry;
 
-import javax.annotation.Nonnull;
+public class BedAddPatternRecipe extends SpecialRecipe {
 
-public class BedAddPatternRecipe extends IRecipeHidden {
+  public static final SpecialRecipeSerializer<BedAddPatternRecipe> CRAFTING_ADD_PATTERN = new SpecialRecipeSerializer<>(
+      BedAddPatternRecipe::new);
 
-    private static final ResourceLocation ID = new ResourceLocation(CosmeticBeds.MODID, "add_pattern");
+  public BedAddPatternRecipe(ResourceLocation id) {
 
-    public static final RecipeSerializers.SimpleSerializer<BedAddPatternRecipe> CRAFTING_ADD_PATTERN =
-            new RecipeSerializers.SimpleSerializer<>(ID.toString(), BedAddPatternRecipe::new);
+    super(id);
+  }
 
-    public BedAddPatternRecipe(ResourceLocation id) {
-        super(id);
-    }
+  @Override
+  public boolean matches(@Nonnull CraftingInventory inv, @Nonnull World worldIn) {
 
-    @Override
-    public boolean matches(@Nonnull IInventory inv, @Nonnull World worldIn) {
+    ItemStack itemstack = ItemStack.EMPTY;
+    ItemStack itemstack1 = ItemStack.EMPTY;
 
-        if (!(inv instanceof InventoryCrafting)) {
+    for (int i = 0; i < inv.getSizeInventory(); ++i) {
+      ItemStack stack = inv.getStackInSlot(i);
+
+      if (!stack.isEmpty()) {
+
+        if (stack.getItem() instanceof BannerItem) {
+
+          if (!itemstack.isEmpty()) {
             return false;
+          }
+
+          itemstack = stack;
+        } else if (stack.getItem() instanceof BedItem) {
+
+          if (!itemstack1.isEmpty()) {
+            return false;
+          }
+
+          itemstack1 = stack;
         } else {
-            ItemStack itemstack = ItemStack.EMPTY;
-            ItemStack itemstack1 = ItemStack.EMPTY;
-
-            for(int i = 0; i < inv.getSizeInventory(); ++i) {
-                ItemStack stack = inv.getStackInSlot(i);
-
-                if (!stack.isEmpty()) {
-
-                    if (stack.getItem() instanceof ItemBanner) {
-
-                        if (!itemstack.isEmpty()) {
-                            return false;
-                        }
-                        itemstack = stack;
-                    } else if (stack.getItem() instanceof ItemBed) {
-
-                        if (!itemstack1.isEmpty()) {
-                            return false;
-                        }
-                        itemstack1 = stack;
-                    } else {
-                        return false;
-                    }
-                }
-            }
-            return !itemstack.isEmpty() && !itemstack1.isEmpty();
+          return false;
         }
+      }
     }
 
-    @Nonnull
-    @Override
-    public ItemStack getCraftingResult(@Nonnull IInventory inv) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        ItemStack itemstack1 = ItemStack.EMPTY;
+    return !itemstack.isEmpty() && !itemstack1.isEmpty();
+  }
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+  @Nonnull
+  @Override
+  public ItemStack getCraftingResult(@Nonnull CraftingInventory inv) {
 
-            if (!stack.isEmpty()) {
+    ItemStack itemstack = ItemStack.EMPTY;
+    ItemStack itemstack1 = ItemStack.EMPTY;
 
-                if (stack.getItem() instanceof ItemBanner) {
-                    itemstack = stack.copy();
-                } else if (stack.getItem() instanceof ItemBed) {
-                    itemstack1 = stack.copy();
-                }
-            }
+    for (int i = 0; i < inv.getSizeInventory(); ++i) {
+      ItemStack stack = inv.getStackInSlot(i);
+
+      if (!stack.isEmpty()) {
+
+        if (stack.getItem() instanceof BannerItem) {
+          itemstack = stack.copy();
+        } else if (stack.getItem() instanceof BedItem) {
+          itemstack1 = stack.copy();
         }
-
-        if (itemstack1.isEmpty()) {
-            return ItemStack.EMPTY;
-        } else {
-            ItemStack stack = new ItemStack(CosmeticBedsRegistry.COSMETIC_BED_ITEM);
-            NBTTagCompound nbttagcompound = stack.getOrCreateChildTag("BlockEntityTag");
-            nbttagcompound.put("BannerStack", itemstack.write(new NBTTagCompound()));
-            nbttagcompound.put("BedStack", itemstack1.write(new NBTTagCompound()));
-            return stack;
-        }
+      }
     }
 
-    @Override
-    public boolean canFit(int width, int height) {
-        return width * height >= 2;
+    if (itemstack1.isEmpty()) {
+      return ItemStack.EMPTY;
+    } else {
+      ItemStack stack = new ItemStack(CosmeticBedsRegistry.COSMETIC_BED_ITEM);
+      CompoundNBT nbttagcompound = stack.getOrCreateChildTag("BlockEntityTag");
+      nbttagcompound.put("BannerStack", itemstack.write(new CompoundNBT()));
+      nbttagcompound.put("BedStack", itemstack1.write(new CompoundNBT()));
+      return stack;
     }
+  }
 
-    @Nonnull
-    @Override
-    public IRecipeSerializer<?> getSerializer() {
-        return CRAFTING_ADD_PATTERN;
-    }
+  @Override
+  public boolean canFit(int width, int height) {
+    return width * height >= 2;
+  }
+
+  @Nonnull
+  @Override
+  public IRecipeSerializer<?> getSerializer() {
+    return CRAFTING_ADD_PATTERN;
+  }
 }

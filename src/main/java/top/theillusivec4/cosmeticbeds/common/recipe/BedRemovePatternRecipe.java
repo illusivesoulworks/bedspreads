@@ -19,102 +19,99 @@
 
 package top.theillusivec4.cosmeticbeds.common.recipe;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
+import javax.annotation.Nonnull;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeHidden;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.RecipeSerializers;
+import net.minecraft.item.crafting.SpecialRecipe;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import top.theillusivec4.cosmeticbeds.CosmeticBeds;
 import top.theillusivec4.cosmeticbeds.common.CosmeticBedItem;
 
-import javax.annotation.Nonnull;
+public class BedRemovePatternRecipe extends SpecialRecipe {
 
-public class BedRemovePatternRecipe extends IRecipeHidden {
+  public static final SpecialRecipeSerializer<BedRemovePatternRecipe> CRAFTING_REMOVE_PATTERN = new SpecialRecipeSerializer<>(
+      BedRemovePatternRecipe::new);
 
-    private static final ResourceLocation ID = new ResourceLocation(CosmeticBeds.MODID, "remove_pattern");
+  public BedRemovePatternRecipe(ResourceLocation id) {
 
-    public static final RecipeSerializers.SimpleSerializer<BedRemovePatternRecipe> CRAFTING_REMOVE_PATTERN =
-            new RecipeSerializers.SimpleSerializer<>(ID.toString(), BedRemovePatternRecipe::new);
+    super(id);
+  }
 
-    public BedRemovePatternRecipe(ResourceLocation id) {
-        super(id);
-    }
+  @Override
+  public boolean matches(@Nonnull CraftingInventory inv, @Nonnull World worldIn) {
 
-    @Override
-    public boolean matches(@Nonnull IInventory inv, @Nonnull World worldIn) {
+    ItemStack itemstack = ItemStack.EMPTY;
 
-        if (!(inv instanceof InventoryCrafting)) {
-            return false;
+    for (int i = 0; i < inv.getSizeInventory(); i++) {
+      ItemStack stack = inv.getStackInSlot(i);
+
+      if (!stack.isEmpty()) {
+
+        if (!itemstack.isEmpty() || !(stack.getItem() instanceof CosmeticBedItem)) {
+          return false;
         } else {
-            ItemStack itemstack = ItemStack.EMPTY;
-
-            for (int i = 0; i < inv.getSizeInventory(); i++) {
-                ItemStack stack = inv.getStackInSlot(i);
-
-                if (!stack.isEmpty()) {
-
-                    if (!itemstack.isEmpty() || !(stack.getItem() instanceof CosmeticBedItem)) {
-                        return false;
-                    } else {
-                        itemstack = stack.copy();
-                    }
-                }
-            }
-            return !itemstack.isEmpty();
+          itemstack = stack.copy();
         }
+      }
     }
 
-    @Nonnull
-    @Override
-    public ItemStack getCraftingResult(@Nonnull IInventory inv) {
-        ItemStack itemstack = ItemStack.EMPTY;
+    return !itemstack.isEmpty();
+  }
 
-        for (int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack stack = inv.getStackInSlot(i);
+  @Nonnull
+  @Override
+  public ItemStack getCraftingResult(@Nonnull CraftingInventory inv) {
 
-            if (!stack.isEmpty()) {
+    ItemStack itemstack = ItemStack.EMPTY;
 
-                if (stack.getItem() instanceof CosmeticBedItem) {
-                    itemstack = stack.copy();
-                    break;
-                }
-            }
+    for (int i = 0; i < inv.getSizeInventory(); ++i) {
+      ItemStack stack = inv.getStackInSlot(i);
+
+      if (!stack.isEmpty()) {
+
+        if (stack.getItem() instanceof CosmeticBedItem) {
+          itemstack = stack.copy();
+          break;
         }
-
-        if (itemstack.isEmpty()) {
-            return ItemStack.EMPTY;
-        } else {
-            return CosmeticBedItem.getBannerStack(itemstack);
-        }
+      }
     }
 
-    @Nonnull
-    @Override
-    public NonNullList<ItemStack> getRemainingItems(IInventory inv) {
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+    if (itemstack.isEmpty()) {
+      return ItemStack.EMPTY;
+    } else {
+      return CosmeticBedItem.getBannerStack(itemstack);
+    }
+  }
 
-        for(int i = 0; i < nonnulllist.size(); ++i) {
-            ItemStack item = inv.getStackInSlot(i);
+  @Nonnull
+  @Override
+  public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
 
-            if (!item.isEmpty() && item.getItem() instanceof CosmeticBedItem) {
-                nonnulllist.set(i, CosmeticBedItem.getBedStack(item));
-            }
-        }
-        return nonnulllist;
+    NonNullList<ItemStack> nonnulllist = NonNullList
+        .withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+
+    for (int i = 0; i < nonnulllist.size(); ++i) {
+      ItemStack item = inv.getStackInSlot(i);
+
+      if (!item.isEmpty() && item.getItem() instanceof CosmeticBedItem) {
+        nonnulllist.set(i, CosmeticBedItem.getBedStack(item));
+      }
     }
 
-    @Override
-    public boolean canFit(int width, int height) {
-        return width * height >= 2;
-    }
+    return nonnulllist;
+  }
 
-    @Nonnull
-    @Override
-    public IRecipeSerializer<?> getSerializer() {
-        return CRAFTING_REMOVE_PATTERN;
-    }
+  @Override
+  public boolean canFit(int width, int height) {
+    return width * height >= 2;
+  }
+
+  @Nonnull
+  @Override
+  public IRecipeSerializer<?> getSerializer() {
+    return CRAFTING_REMOVE_PATTERN;
+  }
 }

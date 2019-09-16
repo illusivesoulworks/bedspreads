@@ -43,73 +43,79 @@ import top.theillusivec4.cosmeticbeds.CosmeticBeds;
 
 public class CosmeticBedBlock extends BedBlock {
 
-    public CosmeticBedBlock() {
-        super(DyeColor.WHITE, Block.Properties.create(Material.WOOL).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
-        this.setRegistryName(CosmeticBeds.MODID, "cosmetic_bed");
-    }
+  public CosmeticBedBlock() {
+    super(DyeColor.WHITE,
+        Block.Properties.create(Material.WOOL).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
+    this.setRegistryName(CosmeticBeds.MODID, "cosmetic_bed");
+  }
 
-    @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return new TileEntityCosmeticBed();
-    }
+  private static Direction getDirectionToOther(BedPart part, Direction facing) {
+    return part == BedPart.FOOT ? facing : facing.getOpposite();
+  }
 
-    @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        TileEntity te = world.getTileEntity(pos);
-        return te instanceof TileEntityCosmeticBed ? ((TileEntityCosmeticBed) te).getItem(state) : super.getPickBlock(state, target, world, pos, player);
-    }
+  @Override
+  public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    return new TileEntityCosmeticBed();
+  }
 
-    @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, @Nonnull PlayerEntity player) {
-        BedPart bedpart = state.get(PART);
-        boolean flag = bedpart == BedPart.HEAD;
-        BlockPos blockpos = pos.offset(getDirectionToOther(bedpart, state.get(HORIZONTAL_FACING)));
-        BlockState iblockstate = worldIn.getBlockState(blockpos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        TileEntity tileentityother = worldIn.getTileEntity(blockpos);
+  @Override
+  public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world,
+      BlockPos pos, PlayerEntity player) {
+    TileEntity te = world.getTileEntity(pos);
+    return te instanceof TileEntityCosmeticBed ? ((TileEntityCosmeticBed) te).getItem(state)
+        : super.getPickBlock(state, target, world, pos, player);
+  }
 
-        if (iblockstate.getBlock() == this && iblockstate.get(PART) != bedpart) {
-            worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 35);
-            worldIn.playEvent(player, 2001, blockpos, Block.getStateId(iblockstate));
+  @Override
+  public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state,
+      @Nonnull PlayerEntity player) {
+    BedPart bedpart = state.get(PART);
+    boolean flag = bedpart == BedPart.HEAD;
+    BlockPos blockpos = pos.offset(getDirectionToOther(bedpart, state.get(HORIZONTAL_FACING)));
+    BlockState iblockstate = worldIn.getBlockState(blockpos);
+    TileEntity tileentity = worldIn.getTileEntity(pos);
+    TileEntity tileentityother = worldIn.getTileEntity(blockpos);
 
-            if (!worldIn.isRemote && !player.isCreative()) {
+    if (iblockstate.getBlock() == this && iblockstate.get(PART) != bedpart) {
+      worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 35);
+      worldIn.playEvent(player, 2001, blockpos, Block.getStateId(iblockstate));
 
-                if (flag) {
+      if (!worldIn.isRemote && !player.isCreative()) {
 
-                    if (tileentity instanceof TileEntityCosmeticBed) {
-                        spawnAsEntity(worldIn, pos, ((TileEntityCosmeticBed) tileentity).getItem(state));
-                    }
-                } else {
+        if (flag) {
 
-                    if (tileentityother instanceof TileEntityCosmeticBed) {
-                        spawnAsEntity(worldIn, blockpos, ((TileEntityCosmeticBed) tileentityother).getItem(iblockstate));
-                    }
-                }
-            }
-            player.addStat(Stats.BLOCK_MINED.get(this));
+          if (tileentity instanceof TileEntityCosmeticBed) {
+            spawnAsEntity(worldIn, pos, ((TileEntityCosmeticBed) tileentity).getItem(state));
+          }
+        } else {
+
+          if (tileentityother instanceof TileEntityCosmeticBed) {
+            spawnAsEntity(worldIn, blockpos,
+                ((TileEntityCosmeticBed) tileentityother).getItem(iblockstate));
+          }
         }
-        super.onBlockHarvested(worldIn, pos, state, player);
+      }
+      player.addStat(Stats.BLOCK_MINED.get(this));
     }
+    super.onBlockHarvested(worldIn, pos, state, player);
+  }
 
-    @Override
-    public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
-        BlockPos blockpos = pos.offset(state.get(HORIZONTAL_FACING));
-        worldIn.setBlockState(blockpos, state.with(PART, BedPart.HEAD), 3);
-        worldIn.notifyNeighbors(pos, Blocks.AIR);
-        state.updateNeighbors(worldIn, pos, 3);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+  @Override
+  public void onBlockPlacedBy(World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state,
+      @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
+    BlockPos blockpos = pos.offset(state.get(HORIZONTAL_FACING));
+    worldIn.setBlockState(blockpos, state.with(PART, BedPart.HEAD), 3);
+    worldIn.notifyNeighbors(pos, Blocks.AIR);
+    state.updateNeighbors(worldIn, pos, 3);
+    TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        if (tileentity instanceof TileEntityCosmeticBed) {
-            ((TileEntityCosmeticBed) tileentity).loadFromItemStack(stack);
-        }
-        tileentity = worldIn.getTileEntity(blockpos);
-
-        if (tileentity instanceof TileEntityCosmeticBed) {
-            ((TileEntityCosmeticBed) tileentity).loadFromItemStack(stack);
-        }
+    if (tileentity instanceof TileEntityCosmeticBed) {
+      ((TileEntityCosmeticBed) tileentity).loadFromItemStack(stack);
     }
+    tileentity = worldIn.getTileEntity(blockpos);
 
-    private static Direction getDirectionToOther(BedPart part, Direction facing) {
-        return part == BedPart.FOOT ? facing : facing.getOpposite();
+    if (tileentity instanceof TileEntityCosmeticBed) {
+      ((TileEntityCosmeticBed) tileentity).loadFromItemStack(stack);
     }
+  }
 }
