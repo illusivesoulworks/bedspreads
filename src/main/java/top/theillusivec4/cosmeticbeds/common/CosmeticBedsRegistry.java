@@ -34,10 +34,6 @@ public class CosmeticBedsRegistry {
   @ObjectHolder("cosmetic_bed")
   public static final Item COSMETIC_BED_ITEM = null;
 
-  public static final TileEntityType<TileEntityCosmeticBed> COSMETIC_BED_TE;
-
-  static {
-    COSMETIC_BED_TE = TileEntityType.Builder.create(TileEntityCosmeticBed::new).build(null);
-    COSMETIC_BED_TE.setRegistryName("cosmetic_bed");
-  }
+  @ObjectHolder("cosmetic_bed")
+  public static final TileEntityType<CosmeticBedTileEntity> COSMETIC_BED_TE = null;
 }

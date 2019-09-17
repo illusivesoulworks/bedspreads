@@ -29,11 +29,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import top.theillusivec4.cosmeticbeds.client.renderer.TileEntityCosmeticBedRenderer;
+import top.theillusivec4.cosmeticbeds.client.renderer.CosmeticBedTileEntityRenderer;
 import top.theillusivec4.cosmeticbeds.common.CosmeticBedBlock;
 import top.theillusivec4.cosmeticbeds.common.CosmeticBedItem;
 import top.theillusivec4.cosmeticbeds.common.CosmeticBedsRegistry;
-import top.theillusivec4.cosmeticbeds.common.TileEntityCosmeticBed;
+import top.theillusivec4.cosmeticbeds.common.CosmeticBedTileEntity;
 import top.theillusivec4.cosmeticbeds.common.recipe.BedAddPatternRecipe;
 import top.theillusivec4.cosmeticbeds.common.recipe.BedRemovePatternRecipe;
 
@@ -53,8 +53,8 @@ public class CosmeticBeds {
 
     @SubscribeEvent
     public static void clientSetup(final FMLClientSetupEvent evt) {
-      ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCosmeticBed.class,
-          new TileEntityCosmeticBedRenderer());
+      ClientRegistry.bindTileEntitySpecialRenderer(CosmeticBedTileEntity.class,
+          new CosmeticBedTileEntityRenderer());
     }
   }
 
@@ -73,7 +73,9 @@ public class CosmeticBeds {
 
     @SubscribeEvent
     public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> evt) {
-      evt.getRegistry().register(CosmeticBedsRegistry.COSMETIC_BED_TE);
+      evt.getRegistry().register(TileEntityType.Builder
+          .create(CosmeticBedTileEntity::new, CosmeticBedsRegistry.COSMETIC_BED_BLOCK).build(null)
+          .setRegistryName("cosmetic_bed"));
     }
 
     @SubscribeEvent

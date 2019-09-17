@@ -32,7 +32,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityCosmeticBed extends TileEntity {
+public class CosmeticBedTileEntity extends TileEntity {
 
   private ItemStack bed = ItemStack.EMPTY;
   private ItemStack banner = ItemStack.EMPTY;
@@ -44,7 +44,7 @@ public class TileEntityCosmeticBed extends TileEntity {
   private List<DyeColor> colorList;
   private String patternResourceLocation;
 
-  public TileEntityCosmeticBed() {
+  public CosmeticBedTileEntity() {
     super(CosmeticBedsRegistry.COSMETIC_BED_TE);
   }
 

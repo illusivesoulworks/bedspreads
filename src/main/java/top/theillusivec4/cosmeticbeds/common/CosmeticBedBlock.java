@@ -55,14 +55,14 @@ public class CosmeticBedBlock extends BedBlock {
 
   @Override
   public TileEntity createNewTileEntity(IBlockReader worldIn) {
-    return new TileEntityCosmeticBed();
+    return new CosmeticBedTileEntity();
   }
 
   @Override
   public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world,
       BlockPos pos, PlayerEntity player) {
     TileEntity te = world.getTileEntity(pos);
-    return te instanceof TileEntityCosmeticBed ? ((TileEntityCosmeticBed) te).getItem(state)
+    return te instanceof CosmeticBedTileEntity ? ((CosmeticBedTileEntity) te).getItem(state)
         : super.getPickBlock(state, target, world, pos, player);
   }
 
@@ -84,14 +84,14 @@ public class CosmeticBedBlock extends BedBlock {
 
         if (flag) {
 
-          if (tileentity instanceof TileEntityCosmeticBed) {
-            spawnAsEntity(worldIn, pos, ((TileEntityCosmeticBed) tileentity).getItem(state));
+          if (tileentity instanceof CosmeticBedTileEntity) {
+            spawnAsEntity(worldIn, pos, ((CosmeticBedTileEntity) tileentity).getItem(state));
           }
         } else {
 
-          if (tileentityother instanceof TileEntityCosmeticBed) {
+          if (tileentityother instanceof CosmeticBedTileEntity) {
             spawnAsEntity(worldIn, blockpos,
-                ((TileEntityCosmeticBed) tileentityother).getItem(iblockstate));
+                ((CosmeticBedTileEntity) tileentityother).getItem(iblockstate));
           }
         }
       }
@@ -109,13 +109,13 @@ public class CosmeticBedBlock extends BedBlock {
     state.updateNeighbors(worldIn, pos, 3);
     TileEntity tileentity = worldIn.getTileEntity(pos);
 
-    if (tileentity instanceof TileEntityCosmeticBed) {
-      ((TileEntityCosmeticBed) tileentity).loadFromItemStack(stack);
+    if (tileentity instanceof CosmeticBedTileEntity) {
+      ((CosmeticBedTileEntity) tileentity).loadFromItemStack(stack);
     }
     tileentity = worldIn.getTileEntity(blockpos);
 
-    if (tileentity instanceof TileEntityCosmeticBed) {
-      ((TileEntityCosmeticBed) tileentity).loadFromItemStack(stack);
+    if (tileentity instanceof CosmeticBedTileEntity) {
+      ((CosmeticBedTileEntity) tileentity).loadFromItemStack(stack);
     }
   }
 }

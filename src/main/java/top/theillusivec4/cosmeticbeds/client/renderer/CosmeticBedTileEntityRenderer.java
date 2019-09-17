@@ -32,9 +32,9 @@ import net.minecraft.state.properties.BedPart;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.cosmeticbeds.client.BedTextures;
-import top.theillusivec4.cosmeticbeds.common.TileEntityCosmeticBed;
+import top.theillusivec4.cosmeticbeds.common.CosmeticBedTileEntity;
 
-public class TileEntityCosmeticBedRenderer extends TileEntityRenderer<TileEntityCosmeticBed> {
+public class CosmeticBedTileEntityRenderer extends TileEntityRenderer<CosmeticBedTileEntity> {
 
   private static final ResourceLocation[] TEXTURES = Arrays.stream(DyeColor.values())
       .sorted(Comparator.comparingInt(DyeColor::getId)).map((dyecolor) -> new ResourceLocation(
@@ -42,7 +42,7 @@ public class TileEntityCosmeticBedRenderer extends TileEntityRenderer<TileEntity
       .toArray((ResourceLocation[]::new));
   private final BedModel model = new BedModel();
 
-  public void render(TileEntityCosmeticBed tileEntityIn, double x, double y, double z,
+  public void render(CosmeticBedTileEntity tileEntityIn, double x, double y, double z,
       float partialTicks, int destroyStage) {
 
     if (destroyStage >= 0) {
@@ -98,7 +98,7 @@ public class TileEntityCosmeticBedRenderer extends TileEntityRenderer<TileEntity
   }
 
   @Nullable
-  private ResourceLocation getPatternResourceLocation(TileEntityCosmeticBed bed) {
+  private ResourceLocation getPatternResourceLocation(CosmeticBedTileEntity bed) {
     return BedTextures.BED_DESIGNS
         .getResourceLocation(bed.getPatternResourceLocation(), bed.getPatternList(),
             bed.getColorList());
