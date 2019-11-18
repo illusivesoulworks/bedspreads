@@ -81,7 +81,7 @@ public class BedTextures {
           bedtextures$cacheentry.textureLocation = new ResourceLocation(id);
           Minecraft.getInstance().getTextureManager()
               .loadTexture(bedtextures$cacheentry.textureLocation,
-                  new LayeredColorMaskTexture(cacheResourceLocation, list, colorList));
+                  new LayeredBedTexture(cacheResourceLocation, list, colorList));
           this.cacheMap.put(id, bedtextures$cacheentry);
         }
         bedtextures$cacheentry.lastUseMillis = System.currentTimeMillis();
