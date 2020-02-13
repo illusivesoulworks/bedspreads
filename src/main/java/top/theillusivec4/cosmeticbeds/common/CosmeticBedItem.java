@@ -44,7 +44,7 @@ public class CosmeticBedItem extends BedItem {
 
   public CosmeticBedItem() {
     super(CosmeticBedsRegistry.COSMETIC_BED_BLOCK,
-        new Item.Properties().maxStackSize(1).setTEISR(() -> BedPatternItemStackRenderer::new));
+        new Item.Properties().maxStackSize(1).setISTER(() -> BedPatternItemStackRenderer::new));
     this.setRegistryName(CosmeticBedsRegistry.COSMETIC_BED_BLOCK.getRegistryName());
   }
 

@@ -19,7 +19,9 @@
 
 package top.theillusivec4.cosmeticbeds.client.renderer;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import javax.annotation.Nonnull;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
@@ -30,8 +32,10 @@ public class BedPatternItemStackRenderer extends ItemStackTileEntityRenderer {
   private final CosmeticBedTileEntity bed = new CosmeticBedTileEntity();
 
   @Override
-  public void renderByItem(@Nonnull ItemStack itemStackIn) {
+  public void render(ItemStack itemStackIn, @Nonnull MatrixStack matrixStackIn,
+      @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
     this.bed.loadFromItemStack(itemStackIn);
-    TileEntityRendererDispatcher.instance.renderAsItem(this.bed);
+    TileEntityRendererDispatcher.instance
+        .renderNullable(this.bed, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
   }
 }

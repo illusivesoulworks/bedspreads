@@ -53,8 +53,8 @@ public class CosmeticBeds {
 
     @SubscribeEvent
     public static void clientSetup(final FMLClientSetupEvent evt) {
-      ClientRegistry.bindTileEntitySpecialRenderer(CosmeticBedTileEntity.class,
-          new CosmeticBedTileEntityRenderer());
+      ClientRegistry.bindTileEntityRenderer(CosmeticBedsRegistry.COSMETIC_BED_TE,
+          CosmeticBedTileEntityRenderer::new);
     }
   }
 

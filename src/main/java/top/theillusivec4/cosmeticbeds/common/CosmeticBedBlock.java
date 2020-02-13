@@ -62,7 +62,7 @@ public class CosmeticBedBlock extends BedBlock {
   public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world,
       BlockPos pos, PlayerEntity player) {
     TileEntity te = world.getTileEntity(pos);
-    return te instanceof CosmeticBedTileEntity ? ((CosmeticBedTileEntity) te).getItem(state)
+    return te instanceof CosmeticBedTileEntity ? ((CosmeticBedTileEntity) te).getItem()
         : super.getPickBlock(state, target, world, pos, player);
   }
 
@@ -85,13 +85,12 @@ public class CosmeticBedBlock extends BedBlock {
         if (flag) {
 
           if (tileentity instanceof CosmeticBedTileEntity) {
-            spawnAsEntity(worldIn, pos, ((CosmeticBedTileEntity) tileentity).getItem(state));
+            spawnAsEntity(worldIn, pos, ((CosmeticBedTileEntity) tileentity).getItem());
           }
         } else {
 
           if (tileentityother instanceof CosmeticBedTileEntity) {
-            spawnAsEntity(worldIn, blockpos,
-                ((CosmeticBedTileEntity) tileentityother).getItem(iblockstate));
+            spawnAsEntity(worldIn, blockpos, ((CosmeticBedTileEntity) tileentityother).getItem());
           }
         }
       }
