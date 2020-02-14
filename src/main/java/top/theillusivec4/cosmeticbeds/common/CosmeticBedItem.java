@@ -43,9 +43,9 @@ import top.theillusivec4.cosmeticbeds.client.renderer.BedPatternItemStackRendere
 public class CosmeticBedItem extends BedItem {
 
   public CosmeticBedItem() {
-    super(CosmeticBedsRegistry.COSMETIC_BED_BLOCK,
+    super(CosmeticBedsRegistry.cosmeticBedBlock,
         new Item.Properties().maxStackSize(1).setISTER(() -> BedPatternItemStackRenderer::new));
-    this.setRegistryName(CosmeticBedsRegistry.COSMETIC_BED_BLOCK.getRegistryName());
+    this.setRegistryName(CosmeticBedsRegistry.cosmeticBedBlock.getRegistryName());
   }
 
   public static ItemStack getBedStack(ItemStack stack) {

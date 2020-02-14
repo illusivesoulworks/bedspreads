@@ -29,13 +29,12 @@ import top.theillusivec4.cosmeticbeds.common.CosmeticBedTileEntity;
 
 public class BedPatternItemStackRenderer extends ItemStackTileEntityRenderer {
 
-  private final CosmeticBedTileEntity bed = new CosmeticBedTileEntity();
-
   @Override
   public void render(ItemStack itemStackIn, @Nonnull MatrixStack matrixStackIn,
       @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-    this.bed.loadFromItemStack(itemStackIn);
+    CosmeticBedTileEntity bed = new CosmeticBedTileEntity();
+    bed.loadFromItemStack(itemStackIn);
     TileEntityRendererDispatcher.instance
-        .renderNullable(this.bed, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        .renderNullable(bed, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
   }
 }

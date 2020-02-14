@@ -51,13 +51,6 @@ import top.theillusivec4.cosmeticbeds.common.CosmeticBedTileEntity;
 
 public class CosmeticBedTileEntityRenderer extends TileEntityRenderer<CosmeticBedTileEntity> {
 
-  public static final ResourceLocation BEDSPREAD_ATLAS = new ResourceLocation(
-      "textures/atlas/bedspread_patterns.png");
-
-  public static final Material LOCATION_BED_BASE = new Material(
-      AtlasTexture.LOCATION_BLOCKS_TEXTURE,
-      new ResourceLocation(CosmeticBeds.MODID, "entity/bed_base"));
-
   private final ModelRenderer headPiece;
   private final ModelRenderer footPiece;
   private final ModelRenderer[] legPieces = new ModelRenderer[4];
@@ -89,7 +82,6 @@ public class CosmeticBedTileEntityRenderer extends TileEntityRenderer<CosmeticBe
   public void render(@Nonnull CosmeticBedTileEntity tileEntityIn, float partialTicks,
       @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn,
       int combinedOverlayIn) {
-    Material material = Atlases.BED_TEXTURES[tileEntityIn.getBedColor().getId()];
     List<Pair<BannerPattern, DyeColor>> list = tileEntityIn.getPatternList();
     World world = tileEntityIn.getWorld();
 
@@ -101,17 +93,17 @@ public class CosmeticBedTileEntityRenderer extends TileEntityRenderer<CosmeticBe
               (p_228846_0_, p_228846_1_) -> false);
       int i = icallbackwrapper.apply(new DualBrightnessCallback<>()).get(combinedLightIn);
       this.renderPiece(matrixStackIn, bufferIn, blockstate.get(BedBlock.PART) == BedPart.HEAD,
-          blockstate.get(BedBlock.HORIZONTAL_FACING), material, i, combinedOverlayIn, false, list);
+          blockstate.get(BedBlock.HORIZONTAL_FACING), i, combinedOverlayIn, false, list);
     } else {
-      this.renderPiece(matrixStackIn, bufferIn, true, Direction.SOUTH, material, combinedLightIn,
+      this.renderPiece(matrixStackIn, bufferIn, true, Direction.SOUTH, combinedLightIn,
           combinedOverlayIn, false, list);
-      this.renderPiece(matrixStackIn, bufferIn, false, Direction.SOUTH, material, combinedLightIn,
+      this.renderPiece(matrixStackIn, bufferIn, false, Direction.SOUTH, combinedLightIn,
           combinedOverlayIn, true, list);
     }
   }
 
   private void renderPiece(MatrixStack matrixStack, IRenderTypeBuffer buffer, boolean isHead,
-      Direction direction, Material material, int light, int overlay, boolean p_228847_8_,
+      Direction direction, int light, int overlay, boolean p_228847_8_,
       List<Pair<BannerPattern, DyeColor>> patterns) {
     this.headPiece.showModel = isHead;
     this.footPiece.showModel = !isHead;
@@ -125,17 +117,14 @@ public class CosmeticBedTileEntityRenderer extends TileEntityRenderer<CosmeticBe
     matrixStack.translate(0.5D, 0.5D, 0.5D);
     matrixStack.rotate(Vector3f.ZP.rotationDegrees(180.0F + direction.getHorizontalAngle()));
     matrixStack.translate(-0.5D, -0.5D, -0.5D);
+    Material material = Atlases.BED_TEXTURES[DyeColor.WHITE.getId()];
+    renderPatterns(matrixStack, buffer, light, overlay, this.headPiece, material, patterns);
+    renderPatterns(matrixStack, buffer, light, overlay, this.footPiece, material, patterns);
     IVertexBuilder ivertexbuilder = material.getBuffer(buffer, RenderType::entitySolid);
-    this.headPiece.render(matrixStack, ivertexbuilder, light, overlay);
-    this.footPiece.render(matrixStack, ivertexbuilder, light, overlay);
     this.legPieces[0].render(matrixStack, ivertexbuilder, light, overlay);
     this.legPieces[1].render(matrixStack, ivertexbuilder, light, overlay);
     this.legPieces[2].render(matrixStack, ivertexbuilder, light, overlay);
     this.legPieces[3].render(matrixStack, ivertexbuilder, light, overlay);
-    renderPatterns(matrixStack, buffer, light, overlay, this.headPiece, LOCATION_BED_BASE,
-        patterns);
-    renderPatterns(matrixStack, buffer, light, overlay, this.footPiece, LOCATION_BED_BASE,
-        patterns);
     matrixStack.pop();
   }
 
@@ -148,7 +137,7 @@ public class CosmeticBedTileEntityRenderer extends TileEntityRenderer<CosmeticBe
     for (int i = 0; i < 17 && i < patterns.size(); ++i) {
       Pair<BannerPattern, DyeColor> pair = patterns.get(i);
       float[] afloat = pair.getSecond().getColorComponentValues();
-      Material patternMaterial = new Material(BEDSPREAD_ATLAS,
+      Material patternMaterial = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,
           new ResourceLocation(CosmeticBeds.MODID, "entity/" + pair.getFirst().getFileName()));
       modelRenderer
           .render(matrixStack, patternMaterial.getBuffer(buffer, RenderType::entityNoOutline),

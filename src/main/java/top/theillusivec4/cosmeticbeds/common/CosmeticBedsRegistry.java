@@ -21,19 +21,54 @@ package top.theillusivec4.cosmeticbeds.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.cosmeticbeds.CosmeticBeds;
+import top.theillusivec4.cosmeticbeds.common.recipe.BedAddPatternRecipe;
+import top.theillusivec4.cosmeticbeds.common.recipe.BedRemovePatternRecipe;
 
-@ObjectHolder(CosmeticBeds.MODID)
 public class CosmeticBedsRegistry {
 
-  @ObjectHolder("cosmetic_bed")
-  public static final Block COSMETIC_BED_BLOCK = null;
+  private static final String ADD_PATTERN = "add_pattern";
+  private static final String REMOVE_PATTERN = "remove_pattern";
 
-  @ObjectHolder("cosmetic_bed")
-  public static final Item COSMETIC_BED_ITEM = null;
+  public static Block cosmeticBedBlock;
+  public static Item cosmeticBedItem;
+  public static TileEntityType<CosmeticBedTileEntity> cosmeticBedTe;
 
-  @ObjectHolder("cosmetic_bed")
-  public static final TileEntityType<CosmeticBedTileEntity> COSMETIC_BED_TE = null;
+  @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+  public static class RegistryEvents {
+
+    @SubscribeEvent
+    public static void onBlockRegistry(final RegistryEvent.Register<Block> evt) {
+      cosmeticBedBlock = new CosmeticBedBlock();
+      evt.getRegistry().register(cosmeticBedBlock);
+    }
+
+    @SubscribeEvent
+    public static void onItemRegistry(final RegistryEvent.Register<Item> evt) {
+      cosmeticBedItem = new CosmeticBedItem();
+      evt.getRegistry().register(cosmeticBedItem);
+    }
+
+    @SubscribeEvent
+    public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> evt) {
+      cosmeticBedTe = TileEntityType.Builder
+          .create(CosmeticBedTileEntity::new, CosmeticBedsRegistry.cosmeticBedBlock).build(null);
+      cosmeticBedTe.setRegistryName("cosmetic_bed");
+      evt.getRegistry().register(cosmeticBedTe);
+    }
+
+    @SubscribeEvent
+    public static void onRecipeRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> evt) {
+      BedAddPatternRecipe.CRAFTING_ADD_PATTERN.setRegistryName(CosmeticBeds.MODID, ADD_PATTERN);
+      BedRemovePatternRecipe.CRAFTING_REMOVE_PATTERN
+          .setRegistryName(CosmeticBeds.MODID, REMOVE_PATTERN);
+      evt.getRegistry().registerAll(BedAddPatternRecipe.CRAFTING_ADD_PATTERN,
+          BedRemovePatternRecipe.CRAFTING_REMOVE_PATTERN);
+    }
+  }
 }

@@ -99,7 +99,7 @@ public class BedAddPatternRecipe extends SpecialRecipe {
     if (itemstack1.isEmpty()) {
       return ItemStack.EMPTY;
     } else {
-      ItemStack stack = new ItemStack(CosmeticBedsRegistry.COSMETIC_BED_ITEM);
+      ItemStack stack = new ItemStack(CosmeticBedsRegistry.cosmeticBedItem);
       CompoundNBT nbttagcompound = stack.getOrCreateChildTag("BlockEntityTag");
       nbttagcompound.put("BannerStack", itemstack.write(new CompoundNBT()));
       nbttagcompound.put("BedStack", itemstack1.write(new CompoundNBT()));

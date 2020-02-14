@@ -19,71 +19,45 @@
 
 package top.theillusivec4.cosmeticbeds;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.cosmeticbeds.client.renderer.CosmeticBedTileEntityRenderer;
-import top.theillusivec4.cosmeticbeds.common.CosmeticBedBlock;
-import top.theillusivec4.cosmeticbeds.common.CosmeticBedItem;
 import top.theillusivec4.cosmeticbeds.common.CosmeticBedsRegistry;
-import top.theillusivec4.cosmeticbeds.common.CosmeticBedTileEntity;
-import top.theillusivec4.cosmeticbeds.common.recipe.BedAddPatternRecipe;
-import top.theillusivec4.cosmeticbeds.common.recipe.BedRemovePatternRecipe;
 
 @Mod(CosmeticBeds.MODID)
 public class CosmeticBeds {
 
   public static final String MODID = "cosmeticbeds";
 
-  private static final String ADD_PATTERN = "add_pattern";
-  private static final String REMOVE_PATTERN = "remove_pattern";
-
   public CosmeticBeds() {
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+  }
+
+  private void clientSetup(final FMLClientSetupEvent evt) {
+    ClientRegistry.bindTileEntityRenderer(CosmeticBedsRegistry.cosmeticBedTe,
+        CosmeticBedTileEntityRenderer::new);
   }
 
   @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
   public static class ClientProxy {
 
     @SubscribeEvent
-    public static void clientSetup(final FMLClientSetupEvent evt) {
-      ClientRegistry.bindTileEntityRenderer(CosmeticBedsRegistry.COSMETIC_BED_TE,
-          CosmeticBedTileEntityRenderer::new);
-    }
-  }
+    public static void textureStitch(final TextureStitchEvent.Pre evt) {
 
-  @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-  public static class RegistryEvents {
+      if (evt.getMap().getBasePath() == AtlasTexture.LOCATION_BLOCKS_TEXTURE) {
 
-    @SubscribeEvent
-    public static void onBlockRegistry(final RegistryEvent.Register<Block> evt) {
-      evt.getRegistry().register(new CosmeticBedBlock());
-    }
-
-    @SubscribeEvent
-    public static void onItemRegistry(final RegistryEvent.Register<Item> evt) {
-      evt.getRegistry().register(new CosmeticBedItem());
-    }
-
-    @SubscribeEvent
-    public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> evt) {
-      evt.getRegistry().register(TileEntityType.Builder
-          .create(CosmeticBedTileEntity::new, CosmeticBedsRegistry.COSMETIC_BED_BLOCK).build(null)
-          .setRegistryName("cosmetic_bed"));
-    }
-
-    @SubscribeEvent
-    public static void onRecipeRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> evt) {
-      BedAddPatternRecipe.CRAFTING_ADD_PATTERN.setRegistryName(MODID, ADD_PATTERN);
-      BedRemovePatternRecipe.CRAFTING_REMOVE_PATTERN.setRegistryName(MODID, REMOVE_PATTERN);
-      evt.getRegistry().registerAll(BedAddPatternRecipe.CRAFTING_ADD_PATTERN,
-          BedRemovePatternRecipe.CRAFTING_REMOVE_PATTERN);
+        for (BannerPattern pattern : BannerPattern.values()) {
+          evt.addSprite(new ResourceLocation(MODID, "entity/" + pattern.getFileName()));
+        }
+      }
     }
   }
 }

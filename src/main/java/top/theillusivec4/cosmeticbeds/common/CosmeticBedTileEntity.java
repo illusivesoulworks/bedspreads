@@ -43,7 +43,7 @@ public class CosmeticBedTileEntity extends TileEntity {
   private List<Pair<BannerPattern, DyeColor>> patternList;
 
   public CosmeticBedTileEntity() {
-    super(CosmeticBedsRegistry.COSMETIC_BED_TE);
+    super(CosmeticBedsRegistry.cosmeticBedTe);
   }
 
   public void loadFromItemStack(ItemStack stack) {
@@ -132,7 +132,7 @@ public class CosmeticBedTileEntity extends TileEntity {
   }
 
   public ItemStack getItem() {
-    ItemStack itemstack = new ItemStack(CosmeticBedsRegistry.COSMETIC_BED_ITEM);
+    ItemStack itemstack = new ItemStack(CosmeticBedsRegistry.cosmeticBedItem);
     CompoundNBT compound = itemstack.getOrCreateChildTag("BlockEntityTag");
 
     if (!this.bed.isEmpty()) {
