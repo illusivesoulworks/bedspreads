@@ -57,6 +57,7 @@ public class CosmeticBeds {
         for (BannerPattern pattern : BannerPattern.values()) {
           evt.addSprite(new ResourceLocation(MODID, "entity/" + pattern.getFileName()));
         }
+        evt.addSprite(new ResourceLocation(MODID, "entity/bed_base"));
       }
     }
   }
