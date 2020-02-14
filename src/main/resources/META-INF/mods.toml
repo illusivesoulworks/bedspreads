@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[31,)"
-issueTrackerURL="https://github.com/TheIllusiveC4/CosmeticBeds/issues"
+issueTrackerURL="https://github.com/TheIllusiveC4/Bedspreads/issues"
 logoFile="${mod_icon}"
 [[mods]]
 modId="${mod_id}"
@@ -11,13 +11,13 @@ authors="${mod_author}"
 description='''
 ${mod_description}
 '''
-[[dependencies.cosmeticbeds]]
+[[dependencies.bedspreads]]
     modId="forge"
     mandatory=true
     versionRange="[31.1.0,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.cosmeticbeds]]
+[[dependencies.bedspreads]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.15.2,1.16)"
