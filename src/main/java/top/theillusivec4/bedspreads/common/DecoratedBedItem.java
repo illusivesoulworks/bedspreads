@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import top.theillusivec4.bedspreads.Bedspreads;
 import top.theillusivec4.bedspreads.client.renderer.DecoratedBedItemStackRenderer;
 
 public class DecoratedBedItem extends BedItem {
@@ -45,7 +46,7 @@ public class DecoratedBedItem extends BedItem {
   public DecoratedBedItem() {
     super(DecoratedBedsRegistry.decoratedBedBlock,
         new Item.Properties().maxStackSize(1).setISTER(() -> DecoratedBedItemStackRenderer::new));
-    this.setRegistryName(DecoratedBedsRegistry.decoratedBedBlock.getRegistryName());
+    this.setRegistryName(Bedspreads.MODID, "decorated_bed");
   }
 
   public static ItemStack getBedStack(ItemStack stack) {
@@ -59,17 +60,6 @@ public class DecoratedBedItem extends BedItem {
     }
 
     return ItemStack.EMPTY;
-  }
-
-  public static DyeColor getBedColor(ItemStack stack) {
-
-    if (!stack.isEmpty() && stack.getItem() instanceof BedItem) {
-      return ObfuscationReflectionHelper
-          .getPrivateValue(BedBlock.class, (BedBlock) ((BedItem) stack.getItem()).getBlock(),
-              "field_196352_y");
-    }
-
-    return DyeColor.WHITE;
   }
 
   public static ItemStack getBannerStack(ItemStack stack) {
@@ -103,12 +93,12 @@ public class DecoratedBedItem extends BedItem {
 
     if (!bed.isEmpty()) {
       tooltip.add(new TranslationTextComponent(bed.getTranslationKey())
-          .applyTextStyle(TextFormatting.GRAY));
+          .func_240699_a_(TextFormatting.GRAY));
     }
 
     if (!banner.isEmpty()) {
       tooltip.add(new TranslationTextComponent(banner.getTranslationKey())
-          .applyTextStyle(TextFormatting.GRAY));
+          .func_240699_a_(TextFormatting.GRAY));
       BannerItem.appendHoverTextFromTileEntityTag(banner, tooltip);
     }
   }

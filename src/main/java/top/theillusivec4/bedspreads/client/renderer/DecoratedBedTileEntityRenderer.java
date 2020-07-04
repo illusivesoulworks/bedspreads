@@ -29,13 +29,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.model.Material;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.tileentity.DualBrightnessCallback;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.DyeColor;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.tileentity.BannerPattern;
@@ -44,6 +43,7 @@ import net.minecraft.tileentity.TileEntityMerger;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import top.theillusivec4.bedspreads.Bedspreads;
 import top.theillusivec4.bedspreads.common.DecoratedBedTileEntity;
@@ -79,18 +79,18 @@ public class DecoratedBedTileEntityRenderer extends TileEntityRenderer<Decorated
   }
 
   public static void renderPatterns(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light,
-      int overlay, ModelRenderer modelRenderer, Material material,
+      int overlay, ModelRenderer modelRenderer, RenderMaterial material,
       List<Pair<BannerPattern, DyeColor>> patterns) {
-    modelRenderer
-        .render(matrixStack, material.getBuffer(buffer, RenderType::entitySolid), light, overlay);
+    modelRenderer.render(matrixStack, material.getBuffer(buffer, RenderType::getEntityTranslucent), light,
+        overlay);
 
     for (int i = 0; i < 17 && i < patterns.size(); ++i) {
       Pair<BannerPattern, DyeColor> pair = patterns.get(i);
       float[] afloat = pair.getSecond().getColorComponentValues();
-      Material patternMaterial = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,
+      RenderMaterial patternMaterial = new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE,
           new ResourceLocation(Bedspreads.MODID, "entity/" + pair.getFirst().getFileName()));
       modelRenderer
-          .render(matrixStack, patternMaterial.getBuffer(buffer, RenderType::entityTranslucent),
+          .render(matrixStack, patternMaterial.getBuffer(buffer, RenderType::getEntityTranslucent),
               light, overlay, afloat[0], afloat[1], afloat[2], 1.0F);
     }
   }
@@ -133,11 +133,11 @@ public class DecoratedBedTileEntityRenderer extends TileEntityRenderer<Decorated
     matrixStack.translate(0.5D, 0.5D, 0.5D);
     matrixStack.rotate(Vector3f.ZP.rotationDegrees(180.0F + direction.getHorizontalAngle()));
     matrixStack.translate(-0.5D, -0.5D, -0.5D);
-    Material material = new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE,
+    RenderMaterial material = new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE,
         new ResourceLocation(Bedspreads.MODID, "entity/bed_base"));
     renderPatterns(matrixStack, buffer, light, overlay, this.headPiece, material, patterns);
     renderPatterns(matrixStack, buffer, light, overlay, this.footPiece, material, patterns);
-    IVertexBuilder ivertexbuilder = material.getBuffer(buffer, RenderType::entitySolid);
+    IVertexBuilder ivertexbuilder = material.getBuffer(buffer, RenderType::getEntitySolid);
     this.legPieces[0].render(matrixStack, ivertexbuilder, light, overlay);
     this.legPieces[1].render(matrixStack, ivertexbuilder, light, overlay);
     this.legPieces[2].render(matrixStack, ivertexbuilder, light, overlay);

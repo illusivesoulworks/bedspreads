@@ -22,6 +22,7 @@ package top.theillusivec4.bedspreads.client.renderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
@@ -30,11 +31,12 @@ import top.theillusivec4.bedspreads.common.DecoratedBedTileEntity;
 public class DecoratedBedItemStackRenderer extends ItemStackTileEntityRenderer {
 
   @Override
-  public void render(ItemStack itemStackIn, @Nonnull MatrixStack matrixStackIn,
+  public void func_239207_a_(ItemStack itemStackIn,
+      ItemCameraTransforms.TransformType transformType, @Nonnull MatrixStack matrixStackIn,
       @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
     DecoratedBedTileEntity bed = new DecoratedBedTileEntity();
     bed.loadFromItemStack(itemStackIn);
     TileEntityRendererDispatcher.instance
-        .renderNullable(bed, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        .renderItem(bed, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
   }
 }

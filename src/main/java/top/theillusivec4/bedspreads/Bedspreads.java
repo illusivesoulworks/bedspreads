@@ -19,7 +19,7 @@
 
 package top.theillusivec4.bedspreads;
 
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -52,7 +52,7 @@ public class Bedspreads {
     @SubscribeEvent
     public static void textureStitch(final TextureStitchEvent.Pre evt) {
 
-      if (evt.getMap().getBasePath() == AtlasTexture.LOCATION_BLOCKS_TEXTURE) {
+      if (evt.getMap().getTextureLocation() == PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
 
         for (BannerPattern pattern : BannerPattern.values()) {
           evt.addSprite(new ResourceLocation(MODID, "entity/" + pattern.getFileName()));

@@ -22,6 +22,7 @@ package top.theillusivec4.bedspreads.common;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import javax.annotation.Nonnull;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -36,7 +37,6 @@ public class DecoratedBedTileEntity extends TileEntity {
 
   private ItemStack bed = ItemStack.EMPTY;
   private ItemStack banner = ItemStack.EMPTY;
-  private DyeColor bedColor = DyeColor.WHITE;
   private DyeColor bannerColor = DyeColor.WHITE;
   private ListNBT patterns;
   private boolean patternDataSet;
@@ -53,10 +53,6 @@ public class DecoratedBedTileEntity extends TileEntity {
     if (nbttagcompound != null) {
       this.bed = ItemStack.read(nbttagcompound.getCompound("BedStack"));
       this.banner = ItemStack.read(nbttagcompound.getCompound("BannerStack"));
-
-      if (!this.bed.isEmpty()) {
-        this.bedColor = DecoratedBedItem.getBedColor(this.bed);
-      }
 
       if (!this.banner.isEmpty()) {
         this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);
@@ -87,14 +83,10 @@ public class DecoratedBedTileEntity extends TileEntity {
   }
 
   @Override
-  public void read(CompoundNBT compound) {
-    super.read(compound);
+  public void func_230337_a_(BlockState blockState, CompoundNBT compound) {
+    super.func_230337_a_(blockState, compound);
     this.bed = compound.contains("BedStack") ? ItemStack.read(compound.getCompound("BedStack"))
         : ItemStack.EMPTY;
-
-    if (!this.bed.isEmpty()) {
-      this.bedColor = DecoratedBedItem.getBedColor(this.bed);
-    }
     this.banner =
         compound.contains("BannerStack") ? ItemStack.read(compound.getCompound("BannerStack"))
             : ItemStack.EMPTY;
@@ -121,7 +113,7 @@ public class DecoratedBedTileEntity extends TileEntity {
 
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.read(pkt.getNbtCompound());
+    this.func_230337_a_(this.getBlockState(), pkt.getNbtCompound());
   }
 
   public List<Pair<BannerPattern, DyeColor>> getPatternList() {
