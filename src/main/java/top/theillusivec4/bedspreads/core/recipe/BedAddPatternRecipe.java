@@ -17,37 +17,36 @@
  * License along with Bedspreads.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.bedspreads.common.recipe;
+package top.theillusivec4.bedspreads.core.recipe;
 
-import javax.annotation.Nonnull;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.BedItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import top.theillusivec4.bedspreads.common.DecoratedBedsRegistry;
+import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 
-public class BedAddPatternRecipe extends SpecialRecipe {
+public class BedAddPatternRecipe extends SpecialCraftingRecipe {
 
   public static final SpecialRecipeSerializer<BedAddPatternRecipe> CRAFTING_ADD_PATTERN = new SpecialRecipeSerializer<>(
       BedAddPatternRecipe::new);
 
-  public BedAddPatternRecipe(ResourceLocation id) {
+  public BedAddPatternRecipe(Identifier id) {
     super(id);
   }
 
   @Override
-  public boolean matches(@Nonnull CraftingInventory inv, @Nonnull World worldIn) {
+  public boolean matches(CraftingInventory inv, World worldIn) {
     ItemStack itemstack = ItemStack.EMPTY;
     ItemStack itemstack1 = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getSizeInventory(); ++i) {
-      ItemStack stack = inv.getStackInSlot(i);
+    for (int i = 0; i < inv.size(); ++i) {
+      ItemStack stack = inv.getStack(i);
 
       if (!stack.isEmpty()) {
 
@@ -73,14 +72,13 @@ public class BedAddPatternRecipe extends SpecialRecipe {
     return !itemstack.isEmpty() && !itemstack1.isEmpty();
   }
 
-  @Nonnull
   @Override
-  public ItemStack getCraftingResult(@Nonnull CraftingInventory inv) {
+  public ItemStack craft(CraftingInventory inv) {
     ItemStack itemstack = ItemStack.EMPTY;
     ItemStack itemstack1 = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getSizeInventory(); ++i) {
-      ItemStack stack = inv.getStackInSlot(i);
+    for (int i = 0; i < inv.size(); ++i) {
+      ItemStack stack = inv.getStack(i);
 
       if (!stack.isEmpty()) {
 
@@ -95,22 +93,21 @@ public class BedAddPatternRecipe extends SpecialRecipe {
     if (itemstack1.isEmpty()) {
       return ItemStack.EMPTY;
     } else {
-      ItemStack stack = new ItemStack(DecoratedBedsRegistry.decoratedBedItem);
-      CompoundNBT nbttagcompound = stack.getOrCreateChildTag("BlockEntityTag");
-      nbttagcompound.put("BannerStack", itemstack.write(new CompoundNBT()));
-      nbttagcompound.put("BedStack", itemstack1.write(new CompoundNBT()));
+      ItemStack stack = new ItemStack(BedspreadsRegistry.DECORATED_BED_ITEM);
+      CompoundTag nbttagcompound = stack.getOrCreateSubTag("BlockEntityTag");
+      nbttagcompound.put("BannerStack", itemstack.toTag(new CompoundTag()));
+      nbttagcompound.put("BedStack", itemstack1.toTag(new CompoundTag()));
       return stack;
     }
   }
 
   @Override
-  public boolean canFit(int width, int height) {
+  public boolean fits(int width, int height) {
     return width * height >= 2;
   }
 
-  @Nonnull
   @Override
-  public IRecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<?> getSerializer() {
     return CRAFTING_ADD_PATTERN;
   }
 }

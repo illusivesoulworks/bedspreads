@@ -17,45 +17,38 @@
  * License along with Bedspreads.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.bedspreads.common;
+package top.theillusivec4.bedspreads.loader.common;
 
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.AbstractBannerBlock;
-import net.minecraft.block.BedBlock;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.BedItem;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import top.theillusivec4.bedspreads.Bedspreads;
-import top.theillusivec4.bedspreads.client.renderer.DecoratedBedItemStackRenderer;
+import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 
 public class DecoratedBedItem extends BedItem {
 
   public DecoratedBedItem() {
-    super(DecoratedBedsRegistry.decoratedBedBlock,
-        new Item.Properties().maxStackSize(1).setISTER(() -> DecoratedBedItemStackRenderer::new));
-    this.setRegistryName(Bedspreads.MODID, "decorated_bed");
+    super(BedspreadsRegistry.DECORATED_BED_BLOCK, new Item.Settings().maxCount(1));
   }
 
   public static ItemStack getBedStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      CompoundNBT compound = stack.getChildTag("BlockEntityTag");
+      CompoundTag compound = stack.getSubTag("BlockEntityTag");
 
       if (compound != null) {
-        return ItemStack.read(compound.getCompound("BedStack"));
+        return ItemStack.fromTag(compound.getCompound("BedStack"));
       }
     }
 
@@ -65,10 +58,10 @@ public class DecoratedBedItem extends BedItem {
   public static ItemStack getBannerStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      CompoundNBT compound = stack.getChildTag("BlockEntityTag");
+      CompoundTag compound = stack.getSubTag("BlockEntityTag");
 
       if (compound != null) {
-        return ItemStack.read(compound.getCompound("BannerStack"));
+        return ItemStack.fromTag(compound.getCompound("BannerStack"));
       }
     }
 
@@ -84,22 +77,20 @@ public class DecoratedBedItem extends BedItem {
     return DyeColor.WHITE;
   }
 
-  @OnlyIn(Dist.CLIENT)
+  @Environment(EnvType.CLIENT)
   @Override
-  public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn,
-      @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+  public void appendTooltip(ItemStack stack, World world, List<Text> tooltip,
+      TooltipContext context) {
     ItemStack bed = getBedStack(stack);
     ItemStack banner = getBannerStack(stack);
 
     if (!bed.isEmpty()) {
-      tooltip.add(new TranslationTextComponent(bed.getTranslationKey())
-          .func_240699_a_(TextFormatting.GRAY));
+      tooltip.add(new TranslatableText(bed.getTranslationKey()).formatted(Formatting.GRAY));
     }
 
     if (!banner.isEmpty()) {
-      tooltip.add(new TranslationTextComponent(banner.getTranslationKey())
-          .func_240699_a_(TextFormatting.GRAY));
-      BannerItem.appendHoverTextFromTileEntityTag(banner, tooltip);
+      tooltip.add(new TranslatableText(banner.getTranslationKey()).formatted(Formatting.GRAY));
+      BannerItem.appendBannerTooltip(banner, tooltip);
     }
   }
 }

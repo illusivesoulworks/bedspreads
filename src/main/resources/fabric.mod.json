@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "bedspreads",
+  "version": "${version}",
+  "name": "Bedspreads",
+  "description": "Allows players to add banner patterns to their beds!",
+  "authors": ["C4"],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/bedspreads-fabric",
+    "sources": "https://github.com/TheIllusiveC4/Bedspreads",
+    "issues": "https://github.com/TheIllusiveC4/Bedspreads/issues"
+  },
+  "license": "LGPLv3.0",
+  "icon": "assets/bedspreads/bedspreads_icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "top.theillusivec4.bedspreads.loader.common.BedspreadsMod"
+    ],
+    "client": [
+      "top.theillusivec4.bedspreads.loader.client.BedspreadsClientMod"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "minecraft": "1.16.x",
+    "fabric": "*"
+  }
+}

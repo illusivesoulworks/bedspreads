@@ -17,34 +17,33 @@
  * License along with Bedspreads.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.bedspreads.common.recipe;
+package top.theillusivec4.bedspreads.core.recipe;
 
-import javax.annotation.Nonnull;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.SpecialRecipe;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
-import top.theillusivec4.bedspreads.common.DecoratedBedItem;
+import top.theillusivec4.bedspreads.loader.common.DecoratedBedItem;
 
-public class BedRemovePatternRecipe extends SpecialRecipe {
+public class BedRemovePatternRecipe extends SpecialCraftingRecipe {
 
   public static final SpecialRecipeSerializer<BedRemovePatternRecipe> CRAFTING_REMOVE_PATTERN = new SpecialRecipeSerializer<>(
       BedRemovePatternRecipe::new);
 
-  public BedRemovePatternRecipe(ResourceLocation id) {
+  public BedRemovePatternRecipe(Identifier id) {
     super(id);
   }
 
   @Override
-  public boolean matches(@Nonnull CraftingInventory inv, @Nonnull World worldIn) {
+  public boolean matches(CraftingInventory inv, World worldIn) {
     ItemStack itemstack = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getSizeInventory(); i++) {
-      ItemStack stack = inv.getStackInSlot(i);
+    for (int i = 0; i < inv.size(); i++) {
+      ItemStack stack = inv.getStack(i);
 
       if (!stack.isEmpty()) {
 
@@ -58,13 +57,12 @@ public class BedRemovePatternRecipe extends SpecialRecipe {
     return !itemstack.isEmpty();
   }
 
-  @Nonnull
   @Override
-  public ItemStack getCraftingResult(@Nonnull CraftingInventory inv) {
+  public ItemStack craft(CraftingInventory inv) {
     ItemStack itemstack = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getSizeInventory(); ++i) {
-      ItemStack stack = inv.getStackInSlot(i);
+    for (int i = 0; i < inv.size(); ++i) {
+      ItemStack stack = inv.getStack(i);
 
       if (!stack.isEmpty()) {
 
@@ -82,15 +80,12 @@ public class BedRemovePatternRecipe extends SpecialRecipe {
     }
   }
 
-  @Nonnull
   @Override
-  public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-
-    NonNullList<ItemStack> nonnulllist = NonNullList
-        .withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+  public DefaultedList<ItemStack> getRemainingStacks(CraftingInventory inv) {
+    DefaultedList<ItemStack> nonnulllist = DefaultedList.ofSize(inv.size(), ItemStack.EMPTY);
 
     for (int i = 0; i < nonnulllist.size(); ++i) {
-      ItemStack item = inv.getStackInSlot(i);
+      ItemStack item = inv.getStack(i);
 
       if (!item.isEmpty() && item.getItem() instanceof DecoratedBedItem) {
         nonnulllist.set(i, DecoratedBedItem.getBedStack(item));
@@ -100,13 +95,12 @@ public class BedRemovePatternRecipe extends SpecialRecipe {
   }
 
   @Override
-  public boolean canFit(int width, int height) {
+  public boolean fits(int width, int height) {
     return width * height >= 2;
   }
 
-  @Nonnull
   @Override
-  public IRecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<?> getSerializer() {
     return CRAFTING_REMOVE_PATTERN;
   }
 }

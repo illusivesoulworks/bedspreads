@@ -17,48 +17,47 @@
  * License along with Bedspreads.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.bedspreads.common;
+package top.theillusivec4.bedspreads.loader.common;
 
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
-import javax.annotation.Nonnull;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.DyeColor;
+import net.minecraft.block.entity.BannerBlockEntity;
+import net.minecraft.block.entity.BannerPattern;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.tileentity.BannerTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.util.DyeColor;
+import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 
-public class DecoratedBedTileEntity extends TileEntity {
+public class DecoratedBedBlockEntity extends BlockEntity {
 
   private ItemStack bed = ItemStack.EMPTY;
   private ItemStack banner = ItemStack.EMPTY;
   private DyeColor bannerColor = DyeColor.WHITE;
-  private ListNBT patterns;
+  private ListTag patterns;
   private boolean patternDataSet;
   private List<Pair<BannerPattern, DyeColor>> patternList;
 
-  public DecoratedBedTileEntity() {
-    super(DecoratedBedsRegistry.decoratedBedTe);
+  public DecoratedBedBlockEntity() {
+    super(BedspreadsRegistry.DECORATED_BED_BE);
   }
 
   public void loadFromItemStack(ItemStack stack) {
     this.patterns = null;
-    CompoundNBT nbttagcompound = stack.getChildTag("BlockEntityTag");
+    CompoundTag nbttagcompound = stack.getSubTag("BlockEntityTag");
 
     if (nbttagcompound != null) {
-      this.bed = ItemStack.read(nbttagcompound.getCompound("BedStack"));
-      this.banner = ItemStack.read(nbttagcompound.getCompound("BannerStack"));
+      this.bed = ItemStack.fromTag(nbttagcompound.getCompound("BedStack"));
+      this.banner = ItemStack.fromTag(nbttagcompound.getCompound("BannerStack"));
 
       if (!this.banner.isEmpty()) {
         this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);
       }
     }
-    CompoundNBT bannernbt = banner.getChildTag("BlockEntityTag");
+    CompoundTag bannernbt = banner.getSubTag("BlockEntityTag");
 
     if (bannernbt != null && bannernbt.contains("Patterns", 9)) {
       this.patterns = bannernbt.getList("Patterns", 10).copy();
@@ -67,72 +66,65 @@ public class DecoratedBedTileEntity extends TileEntity {
     this.patternDataSet = true;
   }
 
-  @Nonnull
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
-    super.write(compound);
+  public CompoundTag toTag(CompoundTag compound) {
+    super.toTag(compound);
 
     if (!this.bed.isEmpty()) {
-      compound.put("BedStack", this.bed.write(new CompoundNBT()));
+      compound.put("BedStack", this.bed.toTag(new CompoundTag()));
     }
 
     if (!this.banner.isEmpty()) {
-      compound.put("BannerStack", this.banner.write(new CompoundNBT()));
+      compound.put("BannerStack", this.banner.toTag(new CompoundTag()));
     }
     return compound;
   }
 
   @Override
-  public void func_230337_a_(BlockState blockState, CompoundNBT compound) {
-    super.func_230337_a_(blockState, compound);
-    this.bed = compound.contains("BedStack") ? ItemStack.read(compound.getCompound("BedStack"))
+  public void fromTag(BlockState blockState, CompoundTag compound) {
+    super.fromTag(blockState, compound);
+    this.bed = compound.contains("BedStack") ? ItemStack.fromTag(compound.getCompound("BedStack"))
         : ItemStack.EMPTY;
     this.banner =
-        compound.contains("BannerStack") ? ItemStack.read(compound.getCompound("BannerStack"))
+        compound.contains("BannerStack") ? ItemStack.fromTag(compound.getCompound("BannerStack"))
             : ItemStack.EMPTY;
 
     if (!this.banner.isEmpty()) {
       this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);
     }
-    CompoundNBT bannernbt = banner.getChildTag("BlockEntityTag");
+    CompoundTag bannernbt = banner.getSubTag("BlockEntityTag");
     this.patterns = bannernbt != null ? bannernbt.getList("Patterns", 10).copy() : null;
     this.patternList = null;
     this.patternDataSet = true;
   }
 
   @Override
-  public SUpdateTileEntityPacket getUpdatePacket() {
-    return new SUpdateTileEntityPacket(this.pos, 11, this.getUpdateTag());
-  }
-
-  @Nonnull
-  @Override
-  public CompoundNBT getUpdateTag() {
-    return this.write(new CompoundNBT());
+  public BlockEntityUpdateS2CPacket toUpdatePacket() {
+    return new BlockEntityUpdateS2CPacket(this.pos, 11, this.toInitialChunkDataTag());
   }
 
   @Override
-  public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.func_230337_a_(this.getBlockState(), pkt.getNbtCompound());
+  public CompoundTag toInitialChunkDataTag() {
+    return this.toTag(new CompoundTag());
   }
 
   public List<Pair<BannerPattern, DyeColor>> getPatternList() {
     if (this.patternList == null && this.patternDataSet) {
-      this.patternList = BannerTileEntity.func_230138_a_(this.getBannerColor(), this.patterns);
+      this.patternList = BannerBlockEntity.method_24280(this.getBannerColor(), this.patterns);
     }
     return this.patternList;
   }
 
   public ItemStack getItem() {
-    ItemStack itemstack = new ItemStack(DecoratedBedsRegistry.decoratedBedItem);
-    CompoundNBT compound = itemstack.getOrCreateChildTag("BlockEntityTag");
+    ItemStack itemstack = new ItemStack(BedspreadsRegistry.DECORATED_BED_ITEM);
+    CompoundTag compound = itemstack.getOrCreateSubTag("BlockEntityTag");
 
     if (!this.bed.isEmpty()) {
-      compound.put("BedStack", this.bed.write(new CompoundNBT()));
+      compound.put("BedStack", this.bed.toTag(new CompoundTag()));
     }
 
     if (!this.banner.isEmpty()) {
-      compound.put("BannerStack", this.banner.write(new CompoundNBT()));
+      compound.put("BannerStack", this.banner.toTag(new CompoundTag()));
     }
     return itemstack;
   }
