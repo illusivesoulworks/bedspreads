@@ -89,7 +89,7 @@ public class DecoratedBedBlock extends BedBlock {
     BlockPos blockpos = pos.offset(state.get(FACING));
     worldIn.setBlockState(blockpos, state.with(PART, BedPart.HEAD), 3);
     worldIn.updateNeighbors(pos, Blocks.AIR);
-    state.method_30101(worldIn, pos, 3);
+    state.updateNeighbors(worldIn, pos, 3);
     BlockEntity blockentity = worldIn.getBlockEntity(pos);
 
     if (blockentity instanceof DecoratedBedBlockEntity) {

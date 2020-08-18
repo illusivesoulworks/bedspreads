@@ -10,7 +10,7 @@
     "sources": "https://github.com/TheIllusiveC4/Bedspreads",
     "issues": "https://github.com/TheIllusiveC4/Bedspreads/issues"
   },
-  "license": "LGPLv3.0",
+  "license": "LGPL-3.0-or-later",
   "icon": "assets/bedspreads/bedspreads_icon.png",
   "environment": "*",
   "entrypoints": {
@@ -24,7 +24,6 @@
   "mixins": [],
   "depends": {
     "fabricloader": ">=0.7.4",
-    "minecraft": "1.16.x",
-    "fabric": "*"
+    "minecraft": "1.16.x"
   }
 }
