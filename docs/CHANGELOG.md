@@ -7,6 +7,8 @@ This project uses MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 ## [1.16.2-5.0.0.0] - 2020.08.17
 ### Added
 - Added Chinese localization (thanks qsefthuopq!) [#7](https://github.com/TheIllusiveC4/Bedspreads/pull/7)
+### Changed
+- Updated to Minecraft 1.16.2
 
 ## [4.0.0.2] - 2020.08.05
 ### Added
