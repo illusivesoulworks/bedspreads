@@ -83,8 +83,8 @@ public class DecoratedBedTileEntity extends TileEntity {
   }
 
   @Override
-  public void func_230337_a_(BlockState blockState, CompoundNBT compound) {
-    super.func_230337_a_(blockState, compound);
+  public void read(BlockState blockState, CompoundNBT compound) {
+    super.read(blockState, compound);
     this.bed = compound.contains("BedStack") ? ItemStack.read(compound.getCompound("BedStack"))
         : ItemStack.EMPTY;
     this.banner =
@@ -113,7 +113,7 @@ public class DecoratedBedTileEntity extends TileEntity {
 
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.func_230337_a_(this.getBlockState(), pkt.getNbtCompound());
+    this.read(this.getBlockState(), pkt.getNbtCompound());
   }
 
   public List<Pair<BannerPattern, DyeColor>> getPatternList() {

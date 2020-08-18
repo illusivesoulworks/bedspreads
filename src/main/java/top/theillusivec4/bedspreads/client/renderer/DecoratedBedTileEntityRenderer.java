@@ -81,8 +81,9 @@ public class DecoratedBedTileEntityRenderer extends TileEntityRenderer<Decorated
   public static void renderPatterns(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light,
       int overlay, ModelRenderer modelRenderer, RenderMaterial material,
       List<Pair<BannerPattern, DyeColor>> patterns) {
-    modelRenderer.render(matrixStack, material.getBuffer(buffer, RenderType::getEntityTranslucent), light,
-        overlay);
+    modelRenderer
+        .render(matrixStack, material.getBuffer(buffer, RenderType::getEntityTranslucent), light,
+            overlay);
 
     for (int i = 0; i < 17 && i < patterns.size(); ++i) {
       Pair<BannerPattern, DyeColor> pair = patterns.get(i);
@@ -104,7 +105,7 @@ public class DecoratedBedTileEntityRenderer extends TileEntityRenderer<Decorated
     if (world != null) {
       BlockState blockstate = tileEntityIn.getBlockState();
       TileEntityMerger.ICallbackWrapper<? extends BedTileEntity> icallbackwrapper = TileEntityMerger
-          .func_226924_a_(TileEntityType.BED, BedBlock::func_226863_i_, BedBlock::func_226862_h_,
+          .func_226924_a_(TileEntityType.BED, BedBlock::getMergeType, BedBlock::func_226862_h_,
               ChestBlock.FACING, blockstate, world, tileEntityIn.getPos(),
               (p_228846_0_, p_228846_1_) -> false);
       int i = icallbackwrapper.apply(new DualBrightnessCallback<>()).get(combinedLightIn);

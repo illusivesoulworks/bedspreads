@@ -23,7 +23,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.AbstractBannerBlock;
-import net.minecraft.block.BedBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.BedItem;
@@ -37,7 +36,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import top.theillusivec4.bedspreads.Bedspreads;
 import top.theillusivec4.bedspreads.client.renderer.DecoratedBedItemStackRenderer;
 
@@ -92,13 +90,13 @@ public class DecoratedBedItem extends BedItem {
     ItemStack banner = getBannerStack(stack);
 
     if (!bed.isEmpty()) {
-      tooltip.add(new TranslationTextComponent(bed.getTranslationKey())
-          .func_240699_a_(TextFormatting.GRAY));
+      tooltip.add(
+          new TranslationTextComponent(bed.getTranslationKey()).mergeStyle(TextFormatting.GRAY));
     }
 
     if (!banner.isEmpty()) {
-      tooltip.add(new TranslationTextComponent(banner.getTranslationKey())
-          .func_240699_a_(TextFormatting.GRAY));
+      tooltip.add(
+          new TranslationTextComponent(banner.getTranslationKey()).mergeStyle(TextFormatting.GRAY));
       BannerItem.appendHoverTextFromTileEntityTag(banner, tooltip);
     }
   }
