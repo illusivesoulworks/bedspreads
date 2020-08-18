@@ -12,8 +12,8 @@ assignees: TheIllusiveC4
 Please reproduce all issues without any other unnecessary mods before submitting.
 -->
 #### Versions (Be specific, do not write "latest"):
-* Cosmetic Beds:
-* Forge:
+* Bedspreads:
+* Forge/Fabric:
 #### Observed Behavior:
 #### Expected Behavior:
 #### Steps to Reproduce:
