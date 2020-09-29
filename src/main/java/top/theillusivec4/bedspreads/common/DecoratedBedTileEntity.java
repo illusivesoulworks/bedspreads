@@ -118,7 +118,7 @@ public class DecoratedBedTileEntity extends TileEntity {
 
   public List<Pair<BannerPattern, DyeColor>> getPatternList() {
     if (this.patternList == null && this.patternDataSet) {
-      this.patternList = BannerTileEntity.func_230138_a_(this.getBannerColor(), this.patterns);
+      this.patternList = BannerTileEntity.getPatternColorData(this.getBannerColor(), this.patterns);
     }
     return this.patternList;
   }

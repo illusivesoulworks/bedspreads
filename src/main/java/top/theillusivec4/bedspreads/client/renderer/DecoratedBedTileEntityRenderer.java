@@ -105,7 +105,7 @@ public class DecoratedBedTileEntityRenderer extends TileEntityRenderer<Decorated
     if (world != null) {
       BlockState blockstate = tileEntityIn.getBlockState();
       TileEntityMerger.ICallbackWrapper<? extends BedTileEntity> icallbackwrapper = TileEntityMerger
-          .func_226924_a_(TileEntityType.BED, BedBlock::getMergeType, BedBlock::func_226862_h_,
+          .func_226924_a_(TileEntityType.BED, BedBlock::getMergeType, BedBlock::getFootDirection,
               ChestBlock.FACING, blockstate, world, tileEntityIn.getPos(),
               (p_228846_0_, p_228846_1_) -> false);
       int i = icallbackwrapper.apply(new DualBrightnessCallback<>()).get(combinedLightIn);
