@@ -31,8 +31,8 @@ import top.theillusivec4.bedspreads.common.DecoratedBedTileEntity;
 public class DecoratedBedItemStackRenderer extends ItemStackTileEntityRenderer {
 
   @Override
-  public void func_239207_a_(ItemStack itemStackIn,
-      ItemCameraTransforms.TransformType transformType, @Nonnull MatrixStack matrixStackIn,
+  public void func_239207_a_(@Nonnull ItemStack itemStackIn,
+      @Nonnull ItemCameraTransforms.TransformType transformType, @Nonnull MatrixStack matrixStackIn,
       @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
     DecoratedBedTileEntity bed = new DecoratedBedTileEntity();
     bed.loadFromItemStack(itemStackIn);

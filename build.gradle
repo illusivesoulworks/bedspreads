@@ -12,7 +12,6 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'eclipse'
 
 version = "${mod_version}"
 group = "${mod_group}"
