@@ -43,7 +43,7 @@ public class DecoratedBedTileEntity extends TileEntity {
   private List<Pair<BannerPattern, DyeColor>> patternList;
 
   public DecoratedBedTileEntity() {
-    super(DecoratedBedsRegistry.decoratedBedTe);
+    super(DecoratedBedsRegistry.DECORATED_BED_TE);
   }
 
   public void loadFromItemStack(ItemStack stack) {
@@ -69,7 +69,7 @@ public class DecoratedBedTileEntity extends TileEntity {
 
   @Nonnull
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
     super.write(compound);
 
     if (!this.bed.isEmpty()) {
@@ -83,7 +83,7 @@ public class DecoratedBedTileEntity extends TileEntity {
   }
 
   @Override
-  public void read(BlockState blockState, CompoundNBT compound) {
+  public void read(@Nonnull BlockState blockState, @Nonnull CompoundNBT compound) {
     super.read(blockState, compound);
     this.bed = compound.contains("BedStack") ? ItemStack.read(compound.getCompound("BedStack"))
         : ItemStack.EMPTY;
@@ -124,7 +124,7 @@ public class DecoratedBedTileEntity extends TileEntity {
   }
 
   public ItemStack getItem() {
-    ItemStack itemstack = new ItemStack(DecoratedBedsRegistry.decoratedBedItem);
+    ItemStack itemstack = new ItemStack(DecoratedBedsRegistry.DECORATED_BED_ITEM);
     CompoundNBT compound = itemstack.getOrCreateChildTag("BlockEntityTag");
 
     if (!this.bed.isEmpty()) {

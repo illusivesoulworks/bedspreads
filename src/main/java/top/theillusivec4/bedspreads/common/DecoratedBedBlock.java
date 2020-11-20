@@ -46,7 +46,6 @@ public class DecoratedBedBlock extends BedBlock {
   public DecoratedBedBlock() {
     super(DyeColor.WHITE,
         Block.Properties.create(Material.WOOL).sound(SoundType.WOOD).hardnessAndResistance(0.2F));
-    this.setRegistryName(Bedspreads.MODID, "decorated_bed");
   }
 
   private static Direction getDirectionToOther(BedPart part, Direction facing) {
@@ -54,7 +53,7 @@ public class DecoratedBedBlock extends BedBlock {
   }
 
   @Override
-  public TileEntity createNewTileEntity(IBlockReader worldIn) {
+  public TileEntity createNewTileEntity(@Nonnull IBlockReader worldIn) {
     return new DecoratedBedTileEntity();
   }
 

@@ -42,9 +42,8 @@ import top.theillusivec4.bedspreads.client.renderer.DecoratedBedItemStackRendere
 public class DecoratedBedItem extends BedItem {
 
   public DecoratedBedItem() {
-    super(DecoratedBedsRegistry.decoratedBedBlock,
+    super(DecoratedBedsRegistry.DECORATED_BED_BLOCK,
         new Item.Properties().maxStackSize(1).setISTER(() -> DecoratedBedItemStackRenderer::new));
-    this.setRegistryName(Bedspreads.MODID, "decorated_bed");
   }
 
   public static ItemStack getBedStack(ItemStack stack) {

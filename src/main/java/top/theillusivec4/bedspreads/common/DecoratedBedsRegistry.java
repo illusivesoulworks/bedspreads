@@ -34,32 +34,34 @@ public class DecoratedBedsRegistry {
 
   private static final String ADD_PATTERN = "add_pattern";
   private static final String REMOVE_PATTERN = "remove_pattern";
+  private static final String DECORATED_BED = "decorated_bed";
 
-  public static Block decoratedBedBlock;
-  public static Item decoratedBedItem;
-  public static TileEntityType<DecoratedBedTileEntity> decoratedBedTe;
+  public static final Block DECORATED_BED_BLOCK = new DecoratedBedBlock();
+  public static final Item DECORATED_BED_ITEM = new DecoratedBedItem();
+  public static final TileEntityType<DecoratedBedTileEntity> DECORATED_BED_TE =
+      TileEntityType.Builder
+          .create(DecoratedBedTileEntity::new, DecoratedBedsRegistry.DECORATED_BED_BLOCK)
+          .build(null);
 
   @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
   public static class RegistryEvents {
 
     @SubscribeEvent
     public static void onBlockRegistry(final RegistryEvent.Register<Block> evt) {
-      decoratedBedBlock = new DecoratedBedBlock();
-      evt.getRegistry().register(decoratedBedBlock);
+      DECORATED_BED_BLOCK.setRegistryName(Bedspreads.MODID, DECORATED_BED);
+      evt.getRegistry().register(DECORATED_BED_BLOCK);
     }
 
     @SubscribeEvent
     public static void onItemRegistry(final RegistryEvent.Register<Item> evt) {
-      decoratedBedItem = new DecoratedBedItem();
-      evt.getRegistry().register(decoratedBedItem);
+      DECORATED_BED_ITEM.setRegistryName(Bedspreads.MODID, DECORATED_BED);
+      evt.getRegistry().register(DECORATED_BED_ITEM);
     }
 
     @SubscribeEvent
     public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> evt) {
-      decoratedBedTe = TileEntityType.Builder
-          .create(DecoratedBedTileEntity::new, DecoratedBedsRegistry.decoratedBedBlock).build(null);
-      decoratedBedTe.setRegistryName("decorated_bed");
-      evt.getRegistry().register(decoratedBedTe);
+      DECORATED_BED_TE.setRegistryName(Bedspreads.MODID, DECORATED_BED);
+      evt.getRegistry().register(DECORATED_BED_TE);
     }
 
     @SubscribeEvent

@@ -42,7 +42,7 @@ public class Bedspreads {
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {
-    ClientRegistry.bindTileEntityRenderer(DecoratedBedsRegistry.decoratedBedTe,
+    ClientRegistry.bindTileEntityRenderer(DecoratedBedsRegistry.DECORATED_BED_TE,
         DecoratedBedTileEntityRenderer::new);
   }
 
