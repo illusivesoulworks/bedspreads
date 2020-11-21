@@ -139,10 +139,13 @@ public class DecoratedBedBlockEntityRenderer extends BlockEntityRenderer<Decorat
     matrixStack.translate(-0.5D, -0.5D, -0.5D);
     SpriteIdentifier material = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE,
         new Identifier(Bedspreads.MODID, "entity/bed_base"));
-    renderPatterns(matrixStack, vertexConsumerProvider, light, overlay, this.headPiece, material,
-        patterns);
-    renderPatterns(matrixStack, vertexConsumerProvider, light, overlay, this.footPiece, material,
-        patterns);
+
+    if (patterns != null) {
+      renderPatterns(matrixStack, vertexConsumerProvider, light, overlay, this.headPiece, material,
+          patterns);
+      renderPatterns(matrixStack, vertexConsumerProvider, light, overlay, this.footPiece, material,
+          patterns);
+    }
     VertexConsumer ivertexbuilder = material
         .getVertexConsumer(vertexConsumerProvider, RenderLayer::getEntitySolid);
     this.legPieces[0].render(matrixStack, ivertexbuilder, light, overlay);
