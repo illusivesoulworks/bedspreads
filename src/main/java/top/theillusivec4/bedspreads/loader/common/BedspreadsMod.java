@@ -19,12 +19,20 @@
 
 package top.theillusivec4.bedspreads.loader.common;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.enums.BedPart;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.poi.PointOfInterestType;
 import top.theillusivec4.bedspreads.core.Bedspreads;
 import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 import top.theillusivec4.bedspreads.core.recipe.BedAddPatternRecipe;
 import top.theillusivec4.bedspreads.core.recipe.BedRemovePatternRecipe;
+import top.theillusivec4.bedspreads.loader.mixin.PointOfInterestTypeMixin;
 
 public class BedspreadsMod implements ModInitializer {
 
@@ -46,5 +54,16 @@ public class BedspreadsMod implements ModInitializer {
     Registry.register(Registry.ITEM, DECORATED_BED, BedspreadsRegistry.DECORATED_BED_ITEM);
     Registry
         .register(Registry.BLOCK_ENTITY_TYPE, DECORATED_BED, BedspreadsRegistry.DECORATED_BED_BE);
+
+    // Villager POIT
+    PointOfInterestTypeMixin poit = (PointOfInterestTypeMixin) PointOfInterestType.HOME;
+    Set<BlockState> states =
+        BedspreadsRegistry.DECORATED_BED_BLOCK.getStateManager().getStates().stream()
+            .filter((state) ->
+                state.get(BedBlock.PART) == BedPart.HEAD).collect(Collectors.toSet());
+    states.forEach(
+        state -> PointOfInterestTypeMixin.getPoit().put(state, PointOfInterestType.HOME));
+    states.addAll(poit.getBlockStates());
+    poit.setBlockStates(ImmutableSet.copyOf(states));
   }
 }
