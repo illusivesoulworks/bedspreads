@@ -21,6 +21,7 @@ package top.theillusivec4.bedspreads.loader.common;
 
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
+import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.entity.BannerPattern;
@@ -32,7 +33,7 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.DyeColor;
 import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 
-public class DecoratedBedBlockEntity extends BlockEntity {
+public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityClientSerializable {
 
   private ItemStack bed = ItemStack.EMPTY;
   private ItemStack banner = ItemStack.EMPTY;
@@ -99,11 +100,6 @@ public class DecoratedBedBlockEntity extends BlockEntity {
   }
 
   @Override
-  public BlockEntityUpdateS2CPacket toUpdatePacket() {
-    return new BlockEntityUpdateS2CPacket(this.pos, 11, this.toInitialChunkDataTag());
-  }
-
-  @Override
   public CompoundTag toInitialChunkDataTag() {
     return this.toTag(new CompoundTag());
   }
@@ -131,5 +127,15 @@ public class DecoratedBedBlockEntity extends BlockEntity {
 
   public DyeColor getBannerColor() {
     return this.bannerColor;
+  }
+
+  @Override
+  public void fromClientTag(CompoundTag compoundTag) {
+    this.fromTag(null, compoundTag);
+  }
+
+  @Override
+  public CompoundTag toClientTag(CompoundTag compoundTag) {
+    return this.toTag(compoundTag);
   }
 }
