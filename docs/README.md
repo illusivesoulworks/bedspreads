@@ -5,3 +5,7 @@ Bedspreads is a mod that allows players to add banner patterns to their beds, ki
 ![](https://i.postimg.cc/TYrYYjbM/bedshot.png)
 
 In addition, players can separate them again by crafting the decorated bed by itself. This will yield the original banner used and will leave the original bed used in the crafting grid.
+
+## Affiliates
+
+[![BisectHosting](https://i.ibb.co/1G4QPdc/bh-illusive.png)](https://bisecthosting.com/illusive)
