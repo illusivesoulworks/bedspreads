@@ -79,26 +79,31 @@ public class DecoratedBedTileEntityRenderer extends TileEntityRenderer<Decorated
   }
 
   public static void renderPatterns(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light,
-      int overlay, ModelRenderer modelRenderer, RenderMaterial material,
-      List<Pair<BannerPattern, DyeColor>> patterns) {
+                                    int overlay, ModelRenderer modelRenderer,
+                                    RenderMaterial material,
+                                    List<Pair<BannerPattern, DyeColor>> patterns) {
     modelRenderer
         .render(matrixStack, material.getBuffer(buffer, RenderType::getEntityTranslucent), light,
             overlay);
 
-    for (int i = 0; i < 17 && i < patterns.size(); ++i) {
-      Pair<BannerPattern, DyeColor> pair = patterns.get(i);
-      float[] afloat = pair.getSecond().getColorComponentValues();
-      RenderMaterial patternMaterial = new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE,
-          new ResourceLocation(Bedspreads.MODID, "entity/" + pair.getFirst().getFileName()));
-      modelRenderer
-          .render(matrixStack, patternMaterial.getBuffer(buffer, RenderType::getEntityTranslucent),
-              light, overlay, afloat[0], afloat[1], afloat[2], 1.0F);
+    if (patterns != null) {
+
+      for (int i = 0; i < 17 && i < patterns.size(); ++i) {
+        Pair<BannerPattern, DyeColor> pair = patterns.get(i);
+        float[] afloat = pair.getSecond().getColorComponentValues();
+        RenderMaterial patternMaterial = new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE,
+            new ResourceLocation(Bedspreads.MODID, "entity/" + pair.getFirst().getFileName()));
+        modelRenderer
+            .render(matrixStack,
+                patternMaterial.getBuffer(buffer, RenderType::getEntityTranslucent),
+                light, overlay, afloat[0], afloat[1], afloat[2], 1.0F);
+      }
     }
   }
 
   public void render(@Nonnull DecoratedBedTileEntity tileEntityIn, float partialTicks,
-      @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int combinedLightIn,
-      int combinedOverlayIn) {
+                     @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn,
+                     int combinedLightIn, int combinedOverlayIn) {
     List<Pair<BannerPattern, DyeColor>> list = tileEntityIn.getPatternList();
     World world = tileEntityIn.getWorld();
 
@@ -120,8 +125,8 @@ public class DecoratedBedTileEntityRenderer extends TileEntityRenderer<Decorated
   }
 
   private void renderPiece(MatrixStack matrixStack, IRenderTypeBuffer buffer, boolean isHead,
-      Direction direction, int light, int overlay, boolean p_228847_8_,
-      List<Pair<BannerPattern, DyeColor>> patterns) {
+                           Direction direction, int light, int overlay, boolean p_228847_8_,
+                           List<Pair<BannerPattern, DyeColor>> patterns) {
     this.headPiece.showModel = isHead;
     this.footPiece.showModel = !isHead;
     this.legPieces[0].showModel = !isHead;
