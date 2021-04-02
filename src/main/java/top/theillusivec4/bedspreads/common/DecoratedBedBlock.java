@@ -103,7 +103,7 @@ public class DecoratedBedBlock extends BedBlock {
       @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
     BlockPos blockpos = pos.offset(state.get(HORIZONTAL_FACING));
     worldIn.setBlockState(blockpos, state.with(PART, BedPart.HEAD), 3);
-    worldIn.func_230547_a_(pos, Blocks.AIR);
+    worldIn.updateBlock(pos, Blocks.AIR);
     state.updateNeighbours(worldIn, pos, 3);
     TileEntity tileentity = worldIn.getTileEntity(pos);
 
