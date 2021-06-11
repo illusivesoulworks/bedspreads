@@ -19,6 +19,7 @@
 
 package top.theillusivec4.bedspreads.core;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
@@ -30,6 +31,6 @@ public class BedspreadsRegistry {
 
   public static final Block DECORATED_BED_BLOCK = new DecoratedBedBlock();
   public static final Item DECORATED_BED_ITEM = new DecoratedBedItem();
-  public static final BlockEntityType<DecoratedBedBlockEntity> DECORATED_BED_BE = BlockEntityType.Builder
-      .create(DecoratedBedBlockEntity::new, DECORATED_BED_BLOCK).build(null);
+  public static final BlockEntityType<DecoratedBedBlockEntity> DECORATED_BED_BE =
+      FabricBlockEntityTypeBuilder.create(DecoratedBedBlockEntity::new, DECORATED_BED_BLOCK).build();
 }

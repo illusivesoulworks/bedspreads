@@ -54,9 +54,9 @@ public class BedspreadsClientMod implements ClientModInitializer {
     ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE)
         .register((spriteAtlasTexture, registry) -> {
           for (BannerPattern pattern : BannerPattern.values()) {
-            registry.register(new Identifier(Bedspreads.MODID, "entity/" + pattern.getName()));
+            registry.register(new Identifier(Bedspreads.MOD_ID, "entity/" + pattern.getName()));
           }
-          registry.register(new Identifier(Bedspreads.MODID, "entity/bed_base"));
+          registry.register(new Identifier(Bedspreads.MOD_ID, "entity/bed_base"));
         });
     BlockEntityRendererRegistry.INSTANCE
         .register(BedspreadsRegistry.DECORATED_BED_BE, DecoratedBedBlockEntityRenderer::new);

@@ -33,7 +33,6 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class DecoratedBedBlock extends BedBlock {
@@ -48,8 +47,8 @@ public class DecoratedBedBlock extends BedBlock {
   }
 
   @Override
-  public BlockEntity createBlockEntity(BlockView worldIn) {
-    return new DecoratedBedBlockEntity();
+  public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    return new DecoratedBedBlockEntity(pos, state);
   }
 
   @Override
@@ -85,7 +84,7 @@ public class DecoratedBedBlock extends BedBlock {
 
   @Override
   public void onPlaced(World worldIn, BlockPos pos, BlockState state, LivingEntity placer,
-      ItemStack stack) {
+                       ItemStack stack) {
     BlockPos blockpos = pos.offset(state.get(FACING));
     worldIn.setBlockState(blockpos, state.with(PART, BedPart.HEAD), 3);
     worldIn.updateNeighbors(pos, Blocks.AIR);

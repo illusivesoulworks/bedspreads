@@ -2,9 +2,9 @@
   "required": true,
   "minVersion": "0.8",
   "package": "top.theillusivec4.bedspreads.loader.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "PointOfInterestTypeMixin"
+    "MixinPointOfInterestType"
   ],
   "client": [],
   "server": [],

@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.BedPart;
@@ -32,14 +33,14 @@ import top.theillusivec4.bedspreads.core.Bedspreads;
 import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 import top.theillusivec4.bedspreads.core.recipe.BedAddPatternRecipe;
 import top.theillusivec4.bedspreads.core.recipe.BedRemovePatternRecipe;
-import top.theillusivec4.bedspreads.loader.mixin.PointOfInterestTypeMixin;
+import top.theillusivec4.bedspreads.loader.mixin.MixinPointOfInterestType;
 
 public class BedspreadsMod implements ModInitializer {
 
-  private static final String ADD_PATTERN = Bedspreads.MODID + ":add_pattern";
-  private static final String REMOVE_PATTERN = Bedspreads.MODID + ":remove_pattern";
+  private static final String ADD_PATTERN = Bedspreads.MOD_ID + ":add_pattern";
+  private static final String REMOVE_PATTERN = Bedspreads.MOD_ID + ":remove_pattern";
 
-  private static final String DECORATED_BED = Bedspreads.MODID + ":decorated_bed";
+  private static final String DECORATED_BED = Bedspreads.MOD_ID + ":decorated_bed";
 
   @Override
   public void onInitialize() {
@@ -56,13 +57,13 @@ public class BedspreadsMod implements ModInitializer {
         .register(Registry.BLOCK_ENTITY_TYPE, DECORATED_BED, BedspreadsRegistry.DECORATED_BED_BE);
 
     // Villager POIT
-    PointOfInterestTypeMixin poit = (PointOfInterestTypeMixin) PointOfInterestType.HOME;
+    MixinPointOfInterestType poit = (MixinPointOfInterestType) PointOfInterestType.HOME;
     Set<BlockState> states =
         BedspreadsRegistry.DECORATED_BED_BLOCK.getStateManager().getStates().stream()
             .filter((state) ->
                 state.get(BedBlock.PART) == BedPart.HEAD).collect(Collectors.toSet());
     states.forEach(
-        state -> PointOfInterestTypeMixin.getPoit().put(state, PointOfInterestType.HOME));
+        state -> MixinPointOfInterestType.getPoit().put(state, PointOfInterestType.HOME));
     states.addAll(poit.getBlockStates());
     poit.setBlockStates(ImmutableSet.copyOf(states));
   }

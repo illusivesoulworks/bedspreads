@@ -20,21 +20,25 @@
 package top.theillusivec4.bedspreads.loader.client.renderer;
 
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry.DynamicItemRenderer;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.model.json.ModelTransformation.Mode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 import top.theillusivec4.bedspreads.loader.common.DecoratedBedBlockEntity;
 
 public class DecoratedBedItemRenderer implements DynamicItemRenderer {
 
   @Override
   public void render(ItemStack stack, Mode mode, MatrixStack matrices,
-      VertexConsumerProvider vertexConsumers, int light, int overlay) {
-    DecoratedBedBlockEntity bed = new DecoratedBedBlockEntity();
+                     VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    DecoratedBedBlockEntity bed =
+        new DecoratedBedBlockEntity(BlockPos.ORIGIN, BedspreadsRegistry.DECORATED_BED_BLOCK
+            .getDefaultState());
     bed.loadFromItemStack(stack);
-    BlockEntityRenderDispatcher.INSTANCE
+    MinecraftClient.getInstance().getBlockEntityRenderDispatcher()
         .renderEntity(bed, matrices, vertexConsumers, light, overlay);
   }
 }

@@ -23,7 +23,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.BedItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -33,8 +33,9 @@ import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 
 public class BedAddPatternRecipe extends SpecialCraftingRecipe {
 
-  public static final SpecialRecipeSerializer<BedAddPatternRecipe> CRAFTING_ADD_PATTERN = new SpecialRecipeSerializer<>(
-      BedAddPatternRecipe::new);
+  public static final SpecialRecipeSerializer<BedAddPatternRecipe> CRAFTING_ADD_PATTERN =
+      new SpecialRecipeSerializer<>(
+          BedAddPatternRecipe::new);
 
   public BedAddPatternRecipe(Identifier id) {
     super(id);
@@ -94,9 +95,9 @@ public class BedAddPatternRecipe extends SpecialCraftingRecipe {
       return ItemStack.EMPTY;
     } else {
       ItemStack stack = new ItemStack(BedspreadsRegistry.DECORATED_BED_ITEM);
-      CompoundTag nbttagcompound = stack.getOrCreateSubTag("BlockEntityTag");
-      nbttagcompound.put("BannerStack", itemstack.toTag(new CompoundTag()));
-      nbttagcompound.put("BedStack", itemstack1.toTag(new CompoundTag()));
+      NbtCompound nbttagcompound = stack.getOrCreateSubTag("BlockEntityTag");
+      nbttagcompound.put("BannerStack", itemstack.writeNbt(new NbtCompound()));
+      nbttagcompound.put("BedStack", itemstack1.writeNbt(new NbtCompound()));
       return stack;
     }
   }

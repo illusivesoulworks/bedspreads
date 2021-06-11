@@ -81,7 +81,7 @@ public class BedRemovePatternRecipe extends SpecialCraftingRecipe {
   }
 
   @Override
-  public DefaultedList<ItemStack> getRemainingStacks(CraftingInventory inv) {
+  public DefaultedList<ItemStack> getRemainder(CraftingInventory inv) {
     DefaultedList<ItemStack> nonnulllist = DefaultedList.ofSize(inv.size(), ItemStack.EMPTY);
 
     for (int i = 0; i < nonnulllist.size(); ++i) {

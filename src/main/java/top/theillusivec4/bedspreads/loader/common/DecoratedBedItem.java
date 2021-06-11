@@ -28,7 +28,7 @@ import net.minecraft.item.BannerItem;
 import net.minecraft.item.BedItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.DyeColor;
@@ -45,10 +45,10 @@ public class DecoratedBedItem extends BedItem {
   public static ItemStack getBedStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      CompoundTag compound = stack.getSubTag("BlockEntityTag");
+      NbtCompound compound = stack.getSubTag("BlockEntityTag");
 
       if (compound != null) {
-        return ItemStack.fromTag(compound.getCompound("BedStack"));
+        return ItemStack.fromNbt(compound.getCompound("BedStack"));
       }
     }
 
@@ -58,10 +58,10 @@ public class DecoratedBedItem extends BedItem {
   public static ItemStack getBannerStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      CompoundTag compound = stack.getSubTag("BlockEntityTag");
+      NbtCompound compound = stack.getSubTag("BlockEntityTag");
 
       if (compound != null) {
-        return ItemStack.fromTag(compound.getCompound("BannerStack"));
+        return ItemStack.fromNbt(compound.getCompound("BannerStack"));
       }
     }
 
@@ -80,7 +80,7 @@ public class DecoratedBedItem extends BedItem {
   @Environment(EnvType.CLIENT)
   @Override
   public void appendTooltip(ItemStack stack, World world, List<Text> tooltip,
-      TooltipContext context) {
+                            TooltipContext context) {
     ItemStack bed = getBedStack(stack);
     ItemStack banner = getBannerStack(stack);
 

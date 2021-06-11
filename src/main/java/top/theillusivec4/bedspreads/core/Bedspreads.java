@@ -21,5 +21,5 @@ package top.theillusivec4.bedspreads.core;
 
 public class Bedspreads {
 
-  public static final String MODID = "bedspreads";
+  public static final String MOD_ID = "bedspreads";
 }
