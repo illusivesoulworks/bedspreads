@@ -10,12 +10,7 @@ import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.block.entity.BedBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.enums.BedPart;
-import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.model.ModelPartBuilder;
-import net.minecraft.client.model.ModelPartData;
-import net.minecraft.client.model.ModelTransform;
-import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -23,7 +18,6 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.block.entity.LightmapCoordinatesRetriever;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -44,36 +38,6 @@ public class DecoratedBedBlockEntityRenderer
   public DecoratedBedBlockEntityRenderer(BlockEntityRendererFactory.Context ctx) {
     this.bedHead = ctx.getLayerModelPart(EntityModelLayers.BED_HEAD);
     this.bedFoot = ctx.getLayerModelPart(EntityModelLayers.BED_FOOT);
-  }
-
-  public static TexturedModelData getHeadTexturedModelData() {
-    ModelData modelData = new ModelData();
-    ModelPartData modelPartData = modelData.getRoot();
-    modelPartData.addChild("main", ModelPartBuilder
-        .create().uv(0, 0).cuboid(0.0F, 0.0F, 0.0F, 16.0F, 16.0F, 6.0F), ModelTransform.NONE);
-    modelPartData.addChild(
-        EntityModelPartNames.LEFT_LEG,
-        ModelPartBuilder.create().uv(50, 6).cuboid(0.0F, 6.0F, 0.0F, 3.0F, 3.0F, 3.0F),
-        ModelTransform.rotation(1.5707964F, 0.0F, 1.5707964F));
-    modelPartData.addChild(EntityModelPartNames.RIGHT_LEG,
-        ModelPartBuilder.create().uv(50, 18).cuboid(-16.0F, 6.0F, 0.0F, 3.0F, 3.0F, 3.0F),
-        ModelTransform.rotation(1.5707964F, 0.0F, 3.1415927F));
-    return TexturedModelData.of(modelData, 64, 64);
-  }
-
-  public static TexturedModelData getFootTexturedModelData() {
-    ModelData modelData = new ModelData();
-    ModelPartData modelPartData = modelData.getRoot();
-    modelPartData.addChild("main",
-        ModelPartBuilder.create().uv(0, 22).cuboid(0.0F, 0.0F, 0.0F, 16.0F, 16.0F, 6.0F),
-        ModelTransform.NONE);
-    modelPartData.addChild(EntityModelPartNames.LEFT_LEG,
-        ModelPartBuilder.create().uv(50, 0).cuboid(0.0F, 6.0F, -16.0F, 3.0F, 3.0F, 3.0F),
-        ModelTransform.rotation(1.5707964F, 0.0F, 0.0F));
-    modelPartData.addChild(EntityModelPartNames.RIGHT_LEG,
-        ModelPartBuilder.create().uv(50, 12).cuboid(-16.0F, 6.0F, -16.0F, 3.0F, 3.0F, 3.0F),
-        ModelTransform.rotation(1.5707964F, 0.0F, 4.712389F));
-    return TexturedModelData.of(modelData, 64, 64);
   }
 
   public void render(DecoratedBedBlockEntity bedBlockEntity, float f, MatrixStack matrixStack,
@@ -113,22 +77,17 @@ public class DecoratedBedBlockEntityRenderer
         new Identifier(Bedspreads.MOD_ID, "entity/bed_base"));
 
     if (patterns != null) {
-      renderCanvas(matrix, vertexConsumers, light, overlay, this.bedHead, material, patterns);
-      renderCanvas(matrix, vertexConsumers, light, overlay, this.bedFoot, material, patterns);
+      renderCanvas(matrix, vertexConsumers, light, overlay, modelPart, patterns);
     }
     VertexConsumer vertexConsumer =
-        material.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid);
+        material.getVertexConsumer(vertexConsumers, RenderLayer::getEntityTranslucent);
     modelPart.render(matrix, vertexConsumer, light, overlay);
     matrix.pop();
   }
 
   public static void renderCanvas(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                   int light, int overlay, ModelPart canvas,
-                                  SpriteIdentifier baseSprite,
                                   List<Pair<BannerPattern, DyeColor>> patterns) {
-    canvas.render(matrices,
-        baseSprite.getVertexConsumer(vertexConsumers, RenderLayer::getEntitySolid, false), light,
-        overlay);
 
     for (int i = 0; i < 17 && i < patterns.size(); ++i) {
       Pair<BannerPattern, DyeColor> pair = patterns.get(i);
@@ -137,7 +96,7 @@ public class DecoratedBedBlockEntityRenderer
           new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE,
               new Identifier(Bedspreads.MOD_ID, "entity/" + pair.getFirst().getName()));
       canvas.render(matrices,
-          patternMaterial.getVertexConsumer(vertexConsumers, RenderLayer::getEntityNoOutline),
+          patternMaterial.getVertexConsumer(vertexConsumers, RenderLayer::getEntityTranslucent),
           light, overlay, fs[0], fs[1], fs[2], 1.0F);
     }
   }
