@@ -37,6 +37,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import top.theillusivec4.bedspreads.client.renderer.DecoratedBedTileEntityRenderer;
@@ -50,19 +51,21 @@ public class BedspreadsMod {
 
   public BedspreadsMod() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-    eventBus.addListener(this::completeLoad);
+    eventBus.addListener(this::commonSetup);
   }
 
-  private void completeLoad(final FMLLoadCompleteEvent evt) {
-    MixinPointOfInterestType poit = (MixinPointOfInterestType) PoiType.HOME;
-    Set<BlockState> states =
-        DecoratedBedsRegistry.DECORATED_BED_BLOCK.getStateDefinition().getPossibleStates().stream()
-            .filter((state) ->
-                state.getValue(BedBlock.PART) == BedPart.HEAD).collect(Collectors.toSet());
-    states.forEach(
-        state -> MixinPointOfInterestType.getPoit().put(state, PoiType.HOME));
-    states.addAll(poit.getBlockStates());
-    poit.setBlockStates(ImmutableSet.copyOf(states));
+  private void commonSetup(final FMLCommonSetupEvent evt) {
+    evt.enqueueWork(() -> {
+      MixinPointOfInterestType poit = (MixinPointOfInterestType) PoiType.HOME;
+      Set<BlockState> states =
+          DecoratedBedsRegistry.DECORATED_BED_BLOCK.getStateDefinition().getPossibleStates().stream()
+              .filter((state) ->
+                  state.getValue(BedBlock.PART) == BedPart.HEAD).collect(Collectors.toSet());
+      states.forEach(
+          state -> MixinPointOfInterestType.getPoit().put(state, PoiType.HOME));
+      states.addAll(poit.getBlockStates());
+      poit.setBlockStates(ImmutableSet.copyOf(states));
+    });
   }
 
   @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
