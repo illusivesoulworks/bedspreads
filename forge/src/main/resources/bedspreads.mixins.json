@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "top.theillusivec4.bedspreads.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "bedspreads.refmap.json",
+  "mixins": [
+    "MixinPointOfInterestType"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
