@@ -55,15 +55,15 @@ public class DecoratedBedBlock extends BedBlock {
 
   @Override
   public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-    return new DecoratedBedTileEntity(pos, state);
+    return new DecoratedBedBlockEntity(pos, state);
   }
 
   @Override
-  public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world,
-                                BlockPos pos, Player player) {
+  public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world,
+                                     BlockPos pos, Player player) {
     BlockEntity te = world.getBlockEntity(pos);
-    return te instanceof DecoratedBedTileEntity ? ((DecoratedBedTileEntity) te).getItem()
-        : super.getPickBlock(state, target, world, pos, player);
+    return te instanceof DecoratedBedBlockEntity ? ((DecoratedBedBlockEntity) te).getItem() :
+        super.getCloneItemStack(state, target, world, pos, player);
   }
 
   @Override
@@ -84,13 +84,13 @@ public class DecoratedBedBlock extends BedBlock {
 
         if (flag) {
 
-          if (tileentity instanceof DecoratedBedTileEntity) {
-            popResource(worldIn, pos, ((DecoratedBedTileEntity) tileentity).getItem());
+          if (tileentity instanceof DecoratedBedBlockEntity) {
+            popResource(worldIn, pos, ((DecoratedBedBlockEntity) tileentity).getItem());
           }
         } else {
 
-          if (tileentityother instanceof DecoratedBedTileEntity) {
-            popResource(worldIn, blockpos, ((DecoratedBedTileEntity) tileentityother).getItem());
+          if (tileentityother instanceof DecoratedBedBlockEntity) {
+            popResource(worldIn, blockpos, ((DecoratedBedBlockEntity) tileentityother).getItem());
           }
         }
       }
@@ -108,13 +108,13 @@ public class DecoratedBedBlock extends BedBlock {
     state.updateNeighbourShapes(worldIn, pos, 3);
     BlockEntity tileentity = worldIn.getBlockEntity(pos);
 
-    if (tileentity instanceof DecoratedBedTileEntity) {
-      ((DecoratedBedTileEntity) tileentity).loadFromItemStack(stack);
+    if (tileentity instanceof DecoratedBedBlockEntity) {
+      ((DecoratedBedBlockEntity) tileentity).loadFromItemStack(stack);
     }
     tileentity = worldIn.getBlockEntity(blockpos);
 
-    if (tileentity instanceof DecoratedBedTileEntity) {
-      ((DecoratedBedTileEntity) tileentity).loadFromItemStack(stack);
+    if (tileentity instanceof DecoratedBedBlockEntity) {
+      ((DecoratedBedBlockEntity) tileentity).loadFromItemStack(stack);
     }
   }
 }

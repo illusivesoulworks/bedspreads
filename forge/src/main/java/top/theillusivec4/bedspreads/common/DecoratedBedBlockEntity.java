@@ -36,7 +36,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class DecoratedBedTileEntity extends BlockEntity {
+public class DecoratedBedBlockEntity extends BlockEntity {
 
   private ItemStack bed = ItemStack.EMPTY;
   private ItemStack banner = ItemStack.EMPTY;
@@ -45,7 +45,7 @@ public class DecoratedBedTileEntity extends BlockEntity {
   private boolean patternDataSet;
   private List<Pair<BannerPattern, DyeColor>> patternList;
 
-  public DecoratedBedTileEntity(BlockPos pos, BlockState state) {
+  public DecoratedBedBlockEntity(BlockPos pos, BlockState state) {
     super(DecoratedBedsRegistry.DECORATED_BED_TE, pos, state);
   }
 
@@ -104,8 +104,8 @@ public class DecoratedBedTileEntity extends BlockEntity {
   }
 
   @Override
-  public ClientboundBlockEntityDataPacket getUpdatePacket() {
-    return new ClientboundBlockEntityDataPacket(this.worldPosition, 11, this.getUpdateTag());
+  public ClientboundBlockEntityDataPacket m_183216_() {
+    return ClientboundBlockEntityDataPacket.m_195640_(this);
   }
 
   @Nonnull
@@ -116,7 +116,11 @@ public class DecoratedBedTileEntity extends BlockEntity {
 
   @Override
   public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-    this.load(pkt.getTag());
+    final CompoundTag tag = pkt.getTag();
+
+    if (tag != null) {
+      this.load(tag);
+    }
   }
 
   public List<Pair<BannerPattern, DyeColor>> getPatternList() {

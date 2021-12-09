@@ -25,10 +25,10 @@ version = "${mod_version}"
 group = 'top.theillusivec4.bedspreads'
 archivesBaseName = 'bedspreads-forge'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.09.05-1.17.1'
+    mappings channel: 'parchment', version: '2021.12.05-1.17.1'
 
     runs {
         client {

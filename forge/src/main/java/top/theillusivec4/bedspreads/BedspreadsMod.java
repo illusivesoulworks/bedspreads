@@ -80,7 +80,7 @@ public class BedspreadsMod {
     @SubscribeEvent
     public static void textureStitch(final TextureStitchEvent.Pre evt) {
 
-      if (evt.getMap().location() == InventoryMenu.BLOCK_ATLAS) {
+      if (evt.getAtlas().location() == InventoryMenu.BLOCK_ATLAS) {
 
         for (BannerPattern pattern : BannerPattern.values()) {
           evt.addSprite(new ResourceLocation(MODID, "entity/" + pattern.getFilename()));

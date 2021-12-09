@@ -31,7 +31,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
-import top.theillusivec4.bedspreads.common.DecoratedBedTileEntity;
+import top.theillusivec4.bedspreads.common.DecoratedBedBlockEntity;
 import top.theillusivec4.bedspreads.common.DecoratedBedsRegistry;
 
 public class DecoratedBedItemStackRenderer extends BlockEntityWithoutLevelRenderer {
@@ -46,7 +46,7 @@ public class DecoratedBedItemStackRenderer extends BlockEntityWithoutLevelRender
                            @Nonnull ItemTransforms.TransformType transformType,
                            @Nonnull PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn,
                            int combinedLightIn, int combinedOverlayIn) {
-    DecoratedBedTileEntity bed = new DecoratedBedTileEntity(BlockPos.ZERO,
+    DecoratedBedBlockEntity bed = new DecoratedBedBlockEntity(BlockPos.ZERO,
         DecoratedBedsRegistry.DECORATED_BED_BLOCK.defaultBlockState());
     bed.loadFromItemStack(itemStackIn);
     Minecraft.getInstance().getBlockEntityRenderDispatcher()

@@ -49,10 +49,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import top.theillusivec4.bedspreads.BedspreadsMod;
-import top.theillusivec4.bedspreads.common.DecoratedBedTileEntity;
+import top.theillusivec4.bedspreads.common.DecoratedBedBlockEntity;
 
 public class DecoratedBedTileEntityRenderer
-    implements BlockEntityRenderer<DecoratedBedTileEntity> {
+    implements BlockEntityRenderer<DecoratedBedBlockEntity> {
 
   private final ModelPart headPiece;
   private final ModelPart footPiece;
@@ -62,7 +62,7 @@ public class DecoratedBedTileEntityRenderer
     this.footPiece = ctx.bakeLayer(ModelLayers.BED_FOOT);
   }
 
-  public void render(@Nonnull DecoratedBedTileEntity tileEntityIn, float partialTicks,
+  public void render(@Nonnull DecoratedBedBlockEntity tileEntityIn, float partialTicks,
                      @Nonnull PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn,
                      int combinedLightIn, int combinedOverlayIn) {
     List<Pair<BannerPattern, DyeColor>> list = tileEntityIn.getPatternList();

@@ -40,8 +40,8 @@ public class DecoratedBedsRegistry {
 
   public static final Block DECORATED_BED_BLOCK = new DecoratedBedBlock();
   public static final Item DECORATED_BED_ITEM = new DecoratedBedItem();
-  public static final BlockEntityType<DecoratedBedTileEntity> DECORATED_BED_TE =
-      BlockEntityType.Builder.of(DecoratedBedTileEntity::new,
+  public static final BlockEntityType<DecoratedBedBlockEntity> DECORATED_BED_TE =
+      BlockEntityType.Builder.of(DecoratedBedBlockEntity::new,
           DecoratedBedsRegistry.DECORATED_BED_BLOCK).build(null);
 
   @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
