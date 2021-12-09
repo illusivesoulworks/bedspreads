@@ -95,7 +95,7 @@ public class BedAddPatternRecipe extends SpecialCraftingRecipe {
       return ItemStack.EMPTY;
     } else {
       ItemStack stack = new ItemStack(BedspreadsRegistry.DECORATED_BED_ITEM);
-      NbtCompound nbttagcompound = stack.getOrCreateSubTag("BlockEntityTag");
+      NbtCompound nbttagcompound = stack.getOrCreateSubNbt("BlockEntityTag");
       nbttagcompound.put("BannerStack", itemstack.writeNbt(new NbtCompound()));
       nbttagcompound.put("BedStack", itemstack1.writeNbt(new NbtCompound()));
       return stack;

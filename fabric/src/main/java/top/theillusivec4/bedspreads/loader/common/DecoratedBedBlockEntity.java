@@ -21,7 +21,6 @@ package top.theillusivec4.bedspreads.loader.common;
 
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.entity.BannerPattern;
@@ -29,11 +28,15 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
 
-public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityClientSerializable {
+public class DecoratedBedBlockEntity extends BlockEntity {
 
   private ItemStack bed = ItemStack.EMPTY;
   private ItemStack banner = ItemStack.EMPTY;
@@ -48,7 +51,7 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
 
   public void loadFromItemStack(ItemStack stack) {
     this.patterns = null;
-    NbtCompound nbttagcompound = stack.getSubTag("BlockEntityTag");
+    NbtCompound nbttagcompound = stack.getSubNbt("BlockEntityTag");
 
     if (nbttagcompound != null) {
       this.bed = ItemStack.fromNbt(nbttagcompound.getCompound("BedStack"));
@@ -58,7 +61,7 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
         this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);
       }
     }
-    NbtCompound bannernbt = banner.getSubTag("BlockEntityTag");
+    NbtCompound bannernbt = banner.getSubNbt("BlockEntityTag");
 
     if (bannernbt != null && bannernbt.contains("Patterns", 9)) {
       this.patterns = bannernbt.getList("Patterns", 10).copy();
@@ -68,7 +71,7 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
   }
 
   @Override
-  public NbtCompound writeNbt(NbtCompound compound) {
+  protected void writeNbt(NbtCompound compound) {
     super.writeNbt(compound);
 
     if (!this.bed.isEmpty()) {
@@ -78,7 +81,6 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
     if (!this.banner.isEmpty()) {
       compound.put("BannerStack", this.banner.writeNbt(new NbtCompound()));
     }
-    return compound;
   }
 
   @Override
@@ -93,7 +95,7 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
     if (!this.banner.isEmpty()) {
       this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);
     }
-    NbtCompound bannernbt = banner.getSubTag("BlockEntityTag");
+    NbtCompound bannernbt = banner.getSubNbt("BlockEntityTag");
     this.patterns = bannernbt != null ? bannernbt.getList("Patterns", 10).copy() : null;
     this.patternList = null;
     this.patternDataSet = true;
@@ -101,7 +103,7 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
 
   @Override
   public NbtCompound toInitialChunkDataNbt() {
-    return this.writeNbt(new NbtCompound());
+    return this.createNbt();
   }
 
   public List<Pair<BannerPattern, DyeColor>> getPatternList() {
@@ -113,7 +115,7 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
 
   public ItemStack getItem() {
     ItemStack itemstack = new ItemStack(BedspreadsRegistry.DECORATED_BED_ITEM);
-    NbtCompound compound = itemstack.getOrCreateSubTag("BlockEntityTag");
+    NbtCompound compound = itemstack.getOrCreateSubNbt("BlockEntityTag");
 
     if (!this.bed.isEmpty()) {
       compound.put("BedStack", this.bed.writeNbt(new NbtCompound()));
@@ -129,13 +131,9 @@ public class DecoratedBedBlockEntity extends BlockEntity implements BlockEntityC
     return this.bannerColor;
   }
 
+  @Nullable
   @Override
-  public void fromClientTag(NbtCompound compoundTag) {
-    this.readNbt(compoundTag);
-  }
-
-  @Override
-  public NbtCompound toClientTag(NbtCompound compoundTag) {
-    return this.writeNbt(compoundTag);
+  public Packet<ClientPlayPacketListener> toUpdatePacket() {
+    return BlockEntityUpdateS2CPacket.create(this);
   }
 }

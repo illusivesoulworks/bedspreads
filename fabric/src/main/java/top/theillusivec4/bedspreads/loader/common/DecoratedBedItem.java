@@ -45,7 +45,7 @@ public class DecoratedBedItem extends BedItem {
   public static ItemStack getBedStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      NbtCompound compound = stack.getSubTag("BlockEntityTag");
+      NbtCompound compound = stack.getSubNbt("BlockEntityTag");
 
       if (compound != null) {
         return ItemStack.fromNbt(compound.getCompound("BedStack"));
@@ -58,7 +58,7 @@ public class DecoratedBedItem extends BedItem {
   public static ItemStack getBannerStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      NbtCompound compound = stack.getSubTag("BlockEntityTag");
+      NbtCompound compound = stack.getSubNbt("BlockEntityTag");
 
       if (compound != null) {
         return ItemStack.fromNbt(compound.getCompound("BannerStack"));

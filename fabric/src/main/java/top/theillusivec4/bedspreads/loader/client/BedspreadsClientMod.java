@@ -20,7 +20,7 @@
 package top.theillusivec4.bedspreads.loader.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.event.client.player.ClientPickBlockApplyCallback;
@@ -31,9 +31,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult.Type;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import top.theillusivec4.bedspreads.loader.client.renderer.DecoratedBedBlockEntityRenderer;
 import top.theillusivec4.bedspreads.core.Bedspreads;
 import top.theillusivec4.bedspreads.core.BedspreadsRegistry;
+import top.theillusivec4.bedspreads.loader.client.renderer.DecoratedBedBlockEntityRenderer;
 import top.theillusivec4.bedspreads.loader.client.renderer.DecoratedBedItemRenderer;
 import top.theillusivec4.bedspreads.loader.common.DecoratedBedBlockEntity;
 
@@ -58,8 +58,8 @@ public class BedspreadsClientMod implements ClientModInitializer {
           }
           registry.register(new Identifier(Bedspreads.MOD_ID, "entity/bed_base"));
         });
-    BlockEntityRendererRegistry.INSTANCE
-        .register(BedspreadsRegistry.DECORATED_BED_BE, DecoratedBedBlockEntityRenderer::new);
+    BlockEntityRendererRegistry.register(BedspreadsRegistry.DECORATED_BED_BE,
+        DecoratedBedBlockEntityRenderer::new);
     BuiltinItemRendererRegistry.INSTANCE
         .register(BedspreadsRegistry.DECORATED_BED_ITEM, new DecoratedBedItemRenderer());
   }
