@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -70,19 +69,16 @@ public class DecoratedBedBlockEntity extends BlockEntity {
     this.patternDataSet = true;
   }
 
-  @Nonnull
   @Override
-  public CompoundTag save(@Nonnull CompoundTag compound) {
-    super.save(compound);
+  protected void saveAdditional(@Nonnull CompoundTag pTag) {
 
     if (!this.bed.isEmpty()) {
-      compound.put("BedStack", this.bed.save(new CompoundTag()));
+      pTag.put("BedStack", this.bed.save(new CompoundTag()));
     }
 
     if (!this.banner.isEmpty()) {
-      compound.put("BannerStack", this.banner.save(new CompoundTag()));
+      pTag.put("BannerStack", this.banner.save(new CompoundTag()));
     }
-    return compound;
   }
 
   @Override
@@ -104,23 +100,16 @@ public class DecoratedBedBlockEntity extends BlockEntity {
   }
 
   @Override
-  public ClientboundBlockEntityDataPacket m_183216_() {
-    return ClientboundBlockEntityDataPacket.m_195640_(this);
+  public ClientboundBlockEntityDataPacket getUpdatePacket() {
+    return ClientboundBlockEntityDataPacket.create(this);
   }
 
   @Nonnull
   @Override
   public CompoundTag getUpdateTag() {
-    return this.save(new CompoundTag());
-  }
-
-  @Override
-  public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-    final CompoundTag tag = pkt.getTag();
-
-    if (tag != null) {
-      this.load(tag);
-    }
+    CompoundTag tag = new CompoundTag();
+    this.saveAdditional(tag);
+    return tag;
   }
 
   public List<Pair<BannerPattern, DyeColor>> getPatternList() {
