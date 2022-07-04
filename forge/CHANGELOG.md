@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project does not adhere to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 This project uses MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
+## [1.18.2-5.1.1.0] - 2022.07.04
+### Added
+- Added compatibility with Alex's Mobs banner patterns
+
 ## [1.18.1-5.1.0.5] - 2022.01.26
 ### Fixed
 - Fixed crash on Forge 39.0.45+
