@@ -56,9 +56,11 @@ curseforge {
         changelog = file('CHANGELOG.md')
         addGameVersion "Java 17"
         addGameVersion "Fabric"
-        addGameVersion project.minecraft_version
         addArtifact(sourcesJar)
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+        "${curse_versions}".split(',').each {
+            addGameVersion "${it}"
+        }
 
         relations {
             requiredDependency 'fabric-api'
