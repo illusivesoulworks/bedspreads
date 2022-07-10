@@ -23,15 +23,15 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 public class DecoratedBedForgeItem extends DecoratedBedItem {
 
   @Override
-  public void initializeClient(@Nonnull Consumer<IItemRenderProperties> consumer) {
-    consumer.accept(new IItemRenderProperties() {
+  public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
+    consumer.accept(new IClientItemExtensions() {
       @Override
-      public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+      public BlockEntityWithoutLevelRenderer getCustomRenderer() {
         Minecraft mc = Minecraft.getInstance();
         return new DecoratedBedForgeItemStackRenderer(mc.getBlockEntityRenderDispatcher(),
             mc.getEntityModels());
