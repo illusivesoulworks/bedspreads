@@ -15,22 +15,21 @@
  * License along with Bedspreads.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.illusivesoulworks.bedspreads;
+package com.illusivesoulworks.bedspreads.client;
 
-import com.illusivesoulworks.bedspreads.client.DecoratedBedBlockEntityRenderer;
-import com.illusivesoulworks.bedspreads.client.DecoratedBedFabricItemStackRenderer;
-import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 
-public class BedspreadsFabricClientMod implements ClientModInitializer {
+public class DecoratedBedQuiltItemStackRenderer implements
+    BuiltinItemRendererRegistry.DynamicItemRenderer {
 
   @Override
-  public void onInitializeClient() {
-    BlockEntityRendererRegistry.register(BedspreadsRegistry.DECORATED_BED_BLOCK_ENTITY.get(),
-        DecoratedBedBlockEntityRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(BedspreadsRegistry.DECORATED_BED_ITEM.get(),
-        new DecoratedBedFabricItemStackRenderer());
+  public void render(ItemStack stack, ItemDisplayContext displayContext, PoseStack matrices,
+                     MultiBufferSource vertexConsumers, int light, int overlay) {
+    DecoratedBedItemStackRenderer.render(stack, matrices, vertexConsumers, light, overlay);
   }
 }

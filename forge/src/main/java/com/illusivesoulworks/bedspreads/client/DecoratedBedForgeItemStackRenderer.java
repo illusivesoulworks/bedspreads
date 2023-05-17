@@ -22,8 +22,8 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class DecoratedBedForgeItemStackRenderer extends BlockEntityWithoutLevelRenderer {
@@ -35,7 +35,7 @@ public class DecoratedBedForgeItemStackRenderer extends BlockEntityWithoutLevelR
 
   @Override
   public void renderByItem(@Nonnull ItemStack stack,
-                           @Nonnull ItemTransforms.TransformType transformType,
+                           @Nonnull ItemDisplayContext displayContext,
                            @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer,
                            int light, int overlay) {
     DecoratedBedItemStackRenderer.render(stack, poseStack, buffer, light, overlay);

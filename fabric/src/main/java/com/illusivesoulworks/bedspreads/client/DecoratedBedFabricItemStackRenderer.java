@@ -21,13 +21,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class DecoratedBedFabricItemStackRenderer implements
     BuiltinItemRendererRegistry.DynamicItemRenderer {
 
   @Override
-  public void render(ItemStack stack, ItemTransforms.TransformType mode, PoseStack matrices,
+  public void render(ItemStack stack, ItemDisplayContext displayContext, PoseStack matrices,
                      MultiBufferSource vertexConsumers, int light, int overlay) {
     DecoratedBedItemStackRenderer.render(stack, matrices, vertexConsumers, light, overlay);
   }

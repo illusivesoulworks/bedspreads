@@ -1,0 +1,38 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "bedspreads:entity/bed_base"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner",
+      "prefix": "entity/banner/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/additionalbanners",
+      "prefix": "entity/additionalbanners/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/alexsmobs",
+      "prefix": "entity/alexsmobs/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/iceandfire",
+      "prefix": "entity/iceandfire/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/minecraft",
+      "prefix": "entity/minecraft/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/rats",
+      "prefix": "entity/rats/"
+    }
+  ]
+}

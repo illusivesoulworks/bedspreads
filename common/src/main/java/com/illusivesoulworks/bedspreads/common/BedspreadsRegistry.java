@@ -23,7 +23,7 @@ import com.illusivesoulworks.bedspreads.common.recipe.RemovePatternRecipe;
 import com.illusivesoulworks.bedspreads.platform.Services;
 import com.illusivesoulworks.bedspreads.registry.RegistryObject;
 import com.illusivesoulworks.bedspreads.registry.RegistryProvider;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
@@ -36,13 +36,13 @@ public class BedspreadsRegistry {
   private static final String DECORATED_BED = "decorated_bed";
 
   public static final RegistryProvider<Block> BLOCKS =
-      RegistryProvider.get(Registry.BLOCK_REGISTRY, BedspreadsConstants.MOD_ID);
+      RegistryProvider.get(BuiltInRegistries.BLOCK, BedspreadsConstants.MOD_ID);
   public static final RegistryProvider<Item> ITEMS =
-      RegistryProvider.get(Registry.ITEM_REGISTRY, BedspreadsConstants.MOD_ID);
+      RegistryProvider.get(BuiltInRegistries.ITEM, BedspreadsConstants.MOD_ID);
   public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
-      RegistryProvider.get(Registry.BLOCK_ENTITY_TYPE_REGISTRY, BedspreadsConstants.MOD_ID);
+      RegistryProvider.get(BuiltInRegistries.BLOCK_ENTITY_TYPE, BedspreadsConstants.MOD_ID);
   public static final RegistryProvider<RecipeSerializer<?>> RECIPE_SERIALIZERS =
-      RegistryProvider.get(Registry.RECIPE_SERIALIZER, BedspreadsConstants.MOD_ID);
+      RegistryProvider.get(BuiltInRegistries.RECIPE_SERIALIZER, BedspreadsConstants.MOD_ID);
 
   public static final RegistryObject<Block> DECORATED_BED_BLOCK =
       BLOCKS.register(DECORATED_BED, DecoratedBedBlock::new);

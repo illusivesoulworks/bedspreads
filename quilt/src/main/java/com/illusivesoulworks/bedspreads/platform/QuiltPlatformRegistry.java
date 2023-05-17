@@ -40,7 +40,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FabricPlatformRegistry implements IPlatformRegistry {
+public class QuiltPlatformRegistry implements IPlatformRegistry {
 
   @Override
   public <T> RegistryProvider<T> create(ResourceKey<? extends Registry<T>> resourceKey,

@@ -18,19 +18,20 @@
 package com.illusivesoulworks.bedspreads;
 
 import com.illusivesoulworks.bedspreads.client.DecoratedBedBlockEntityRenderer;
-import com.illusivesoulworks.bedspreads.client.DecoratedBedFabricItemStackRenderer;
+import com.illusivesoulworks.bedspreads.client.DecoratedBedQuiltItemStackRenderer;
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 
-public class BedspreadsFabricClientMod implements ClientModInitializer {
+public class BedspreadsQuiltClientMod implements ClientModInitializer {
 
   @Override
-  public void onInitializeClient() {
+  public void onInitializeClient(ModContainer modContainer) {
     BlockEntityRendererRegistry.register(BedspreadsRegistry.DECORATED_BED_BLOCK_ENTITY.get(),
         DecoratedBedBlockEntityRenderer::new);
     BuiltinItemRendererRegistry.INSTANCE.register(BedspreadsRegistry.DECORATED_BED_ITEM.get(),
-        new DecoratedBedFabricItemStackRenderer());
+        new DecoratedBedQuiltItemStackRenderer());
   }
 }

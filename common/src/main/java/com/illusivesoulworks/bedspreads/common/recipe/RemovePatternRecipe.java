@@ -20,22 +20,23 @@ package com.illusivesoulworks.bedspreads.common.recipe;
 import com.illusivesoulworks.bedspreads.common.DecoratedBedItem;
 import javax.annotation.Nonnull;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class RemovePatternRecipe extends CustomRecipe {
 
-  public static final SimpleRecipeSerializer<RemovePatternRecipe> CRAFTING_REMOVE_PATTERN =
-      new SimpleRecipeSerializer<>(
-          RemovePatternRecipe::new);
+  public static final RecipeSerializer<RemovePatternRecipe> CRAFTING_REMOVE_PATTERN =
+      new SimpleCraftingRecipeSerializer<>(RemovePatternRecipe::new);
 
-  public RemovePatternRecipe(ResourceLocation id) {
-    super(id);
+  public RemovePatternRecipe(ResourceLocation id, CraftingBookCategory category) {
+    super(id, category);
   }
 
   @Override
@@ -59,7 +60,8 @@ public class RemovePatternRecipe extends CustomRecipe {
 
   @Nonnull
   @Override
-  public ItemStack assemble(@Nonnull CraftingContainer inv) {
+  public ItemStack assemble(@Nonnull CraftingContainer inv,
+                            @Nonnull RegistryAccess registryAccess) {
     ItemStack itemstack = ItemStack.EMPTY;
 
     for (int i = 0; i < inv.getContainerSize(); ++i) {

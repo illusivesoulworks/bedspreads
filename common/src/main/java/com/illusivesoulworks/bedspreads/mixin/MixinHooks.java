@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.level.block.BedBlock;
@@ -47,7 +47,7 @@ public class MixinHooks {
   public static boolean containsDecoratedBed(PoiType poiType, BlockState state) {
     initBlockStates();
     Holder<PoiType> poiTypeHolder =
-        Registry.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.HOME).orElse(null);
+        BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.HOME).orElse(null);
 
     if (poiTypeHolder != null && poiType == poiTypeHolder.value()) {
       return DECORATED_BED_STATES.contains(state);
@@ -58,7 +58,7 @@ public class MixinHooks {
   public static Optional<Holder<PoiType>> containsDecoratedBed(BlockState state) {
     initBlockStates();
     Holder<PoiType> poiTypeHolder =
-        Registry.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.HOME).orElse(null);
+        BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.HOME).orElse(null);
 
     if (poiTypeHolder != null && DECORATED_BED_STATES.contains(state)) {
       return Optional.of(poiTypeHolder);

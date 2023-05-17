@@ -19,24 +19,26 @@ package com.illusivesoulworks.bedspreads.common.recipe;
 
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
 import javax.annotation.Nonnull;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.BedItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class AddPatternRecipe extends CustomRecipe {
 
-  public static final SimpleRecipeSerializer<AddPatternRecipe> CRAFTING_ADD_PATTERN =
-      new SimpleRecipeSerializer<>(AddPatternRecipe::new);
+  public static final RecipeSerializer<AddPatternRecipe> CRAFTING_ADD_PATTERN =
+      new SimpleCraftingRecipeSerializer<>(AddPatternRecipe::new);
 
-  public AddPatternRecipe(ResourceLocation id) {
-    super(id);
+  public AddPatternRecipe(ResourceLocation id, CraftingBookCategory category) {
+    super(id, category);
   }
 
   @Override
@@ -73,7 +75,8 @@ public class AddPatternRecipe extends CustomRecipe {
 
   @Nonnull
   @Override
-  public ItemStack assemble(@Nonnull CraftingContainer inv) {
+  public ItemStack assemble(@Nonnull CraftingContainer inv,
+                            @Nonnull RegistryAccess registryAccess) {
     ItemStack itemstack = ItemStack.EMPTY;
     ItemStack itemstack1 = ItemStack.EMPTY;
 

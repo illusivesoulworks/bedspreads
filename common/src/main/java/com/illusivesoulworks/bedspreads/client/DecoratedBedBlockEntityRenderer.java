@@ -22,20 +22,23 @@ import com.illusivesoulworks.bedspreads.common.DecoratedBedBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BannerRenderer;
+import net.minecraft.client.renderer.blockentity.BedRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BrightnessCombiner;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
@@ -89,11 +92,11 @@ public class DecoratedBedBlockEntityRenderer
                            List<Pair<Holder<BannerPattern>, DyeColor>> patterns) {
     poseStack.pushPose();
     poseStack.translate(0.0D, 0.5625D, isHead ? -1.0D : 0.0D);
-    poseStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
+    poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
     poseStack.translate(0.5D, 0.5D, 0.5D);
-    poseStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F + direction.toYRot()));
+    poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F + direction.toYRot()));
     poseStack.translate(-0.5D, -0.5D, -0.5D);
-    Material material = new Material(InventoryMenu.BLOCK_ATLAS,
+    Material material = new Material(Sheets.BANNER_SHEET,
         new ResourceLocation(BedspreadsConstants.MOD_ID, "entity/bed_base"));
 
     if (patterns != null) {
@@ -111,7 +114,7 @@ public class DecoratedBedBlockEntityRenderer
     for (int i = 0; i < 17 && i < patterns.size(); ++i) {
       Pair<Holder<BannerPattern>, DyeColor> pair = patterns.get(i);
       float[] afloat = pair.getSecond().getTextureDiffuseColors();
-      Material patternMaterial = new Material(InventoryMenu.BLOCK_ATLAS,
+      Material patternMaterial = new Material(Sheets.BANNER_SHEET,
           new ResourceLocation(BedspreadsConstants.MOD_ID,
               "entity/" + pair.getFirst().unwrapKey().map(key -> {
                 ResourceLocation loc = key.location();
