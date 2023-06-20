@@ -35,12 +35,14 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 
 public class DecoratedBedBlock extends BedBlock {
 
   public DecoratedBedBlock() {
-    super(DyeColor.WHITE, Block.Properties.of(Material.WOOL).sound(SoundType.WOOD).strength(0.2F));
+    super(DyeColor.WHITE,
+        Block.Properties.of().mapColor(MapColor.WOOL).ignitedByLava().sound(SoundType.WOOD)
+            .strength(0.2F));
   }
 
   private static Direction getDirectionToOther(BedPart part, Direction facing) {

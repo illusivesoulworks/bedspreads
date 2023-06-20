@@ -41,6 +41,9 @@
       "contributors": {
         "${mod_author}": "Owner"
       },
+      "contact": {
+        "issues": "${issue_tracker}"
+      },
       "license": "${license}",
       "icon": "${mod_id}_icon.png"
     }

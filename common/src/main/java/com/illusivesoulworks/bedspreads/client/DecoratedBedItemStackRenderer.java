@@ -20,13 +20,8 @@ package com.illusivesoulworks.bedspreads.client;
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
 import com.illusivesoulworks.bedspreads.common.DecoratedBedBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 
