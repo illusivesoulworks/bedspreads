@@ -33,6 +33,11 @@
       "type": "directory",
       "source": "entity/banner/rats",
       "prefix": "entity/rats/"
-    }
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/archaeologybanners",
+      "prefix": "entity/archaeologybanners/"
+    }	
   ]
 }
