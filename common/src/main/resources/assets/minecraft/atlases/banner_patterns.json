@@ -43,6 +43,21 @@
       "type": "directory",
       "source": "entity/banner/supplementaries",
       "prefix": "entity/supplementaries/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/autumnity",
+      "prefix": "entity/autumnity/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/buzzier_bees",
+      "prefix": "entity/buzzier_bees/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/neopolitan",
+      "prefix": "entity/neopolitan/"
     }
   ]
 }
