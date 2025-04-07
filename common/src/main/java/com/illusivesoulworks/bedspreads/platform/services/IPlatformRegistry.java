@@ -44,4 +44,6 @@ public interface IPlatformRegistry {
   DecoratedBedItem getItem();
 
   Holder<PoiType> getPoiType(ResourceKey<PoiType> key);
+
+  boolean isModLoaded(String modId);
 }

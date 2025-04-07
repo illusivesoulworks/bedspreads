@@ -133,4 +133,8 @@ public class DecoratedBedBlockEntity extends BlockEntity {
   public DyeColor getBannerColor() {
     return this.bannerColor;
   }
+
+  public ItemStack getBanner() {
+    return this.banner;
+  }
 }

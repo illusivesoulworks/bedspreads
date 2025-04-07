@@ -19,6 +19,8 @@ package com.illusivesoulworks.bedspreads.client;
 
 import com.illusivesoulworks.bedspreads.BedspreadsConstants;
 import com.illusivesoulworks.bedspreads.common.DecoratedBedBlockEntity;
+import com.illusivesoulworks.bedspreads.common.integration.glowingbanners.GlowingBannersIntegration;
+import com.illusivesoulworks.bedspreads.platform.Services;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -75,7 +77,8 @@ public class DecoratedBedBlockEntityRenderer
                                                   ChestBlock.FACING, blockstate, world,
                                                   blockEntity.getBlockPos(),
                                                   (levelAccessor, blockPos) -> false);
-      int i = icallbackwrapper.apply(new BrightnessCombiner<>()).get(light);
+      int newLight = getLight(light, blockEntity);
+      int i = icallbackwrapper.apply(new BrightnessCombiner<>()).get(newLight);
       this.renderPiece(poseStack, buffer,
                        blockstate.getValue(BedBlock.PART) == BedPart.HEAD ? this.headPiece :
                            this.footPiece,
@@ -86,6 +89,15 @@ public class DecoratedBedBlockEntityRenderer
       this.renderPiece(poseStack, buffer, this.footPiece, Direction.SOUTH, light, overlay, true,
                        list);
     }
+  }
+
+  private static int getLight(int light, DecoratedBedBlockEntity bedBlockEntity) {
+
+    if (Services.REGISTRY.isModLoaded("glowingbanners") && GlowingBannersIntegration.isGlowing(
+        bedBlockEntity)) {
+      return 15728880;
+    }
+    return light;
   }
 
   private void renderPiece(PoseStack poseStack, MultiBufferSource buffer, ModelPart modelPart,

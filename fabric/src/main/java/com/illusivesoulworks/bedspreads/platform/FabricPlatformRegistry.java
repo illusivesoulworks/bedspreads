@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -62,6 +63,11 @@ public class FabricPlatformRegistry implements IPlatformRegistry {
   @Override
   public Holder<PoiType> getPoiType(ResourceKey<PoiType> key) {
     return BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(key);
+  }
+
+  @Override
+  public boolean isModLoaded(String modId) {
+    return FabricLoader.getInstance().isModLoaded(modId);
   }
 
   private static class Provider<T> implements RegistryProvider<T> {

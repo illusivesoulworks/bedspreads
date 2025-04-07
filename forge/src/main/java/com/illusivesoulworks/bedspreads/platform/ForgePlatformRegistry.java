@@ -82,6 +82,11 @@ public class ForgePlatformRegistry implements IPlatformRegistry {
     return ForgeRegistries.POI_TYPES.getHolder(key).orElse(null);
   }
 
+  @Override
+  public boolean isModLoaded(String modId) {
+    return ModList.get().isLoaded(modId);
+  }
+
   private static class Provider<T> implements RegistryProvider<T> {
     private final String modId;
     private final DeferredRegister<T> registry;
