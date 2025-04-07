@@ -30,17 +30,15 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.blockentity.BannerRenderer;
-import net.minecraft.client.renderer.blockentity.BedRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BrightnessCombiner;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
@@ -73,17 +71,20 @@ public class DecoratedBedBlockEntityRenderer
       BlockState blockstate = blockEntity.getBlockState();
       DoubleBlockCombiner.NeighborCombineResult<? extends BedBlockEntity> icallbackwrapper =
           DoubleBlockCombiner.combineWithNeigbour(BlockEntityType.BED, BedBlock::getBlockType,
-              BedBlock::getConnectedDirection, ChestBlock.FACING, blockstate, world,
-              blockEntity.getBlockPos(), (p_228846_0_, p_228846_1_) -> false);
+                                                  BedBlock::getConnectedDirection,
+                                                  ChestBlock.FACING, blockstate, world,
+                                                  blockEntity.getBlockPos(),
+                                                  (levelAccessor, blockPos) -> false);
       int i = icallbackwrapper.apply(new BrightnessCombiner<>()).get(light);
       this.renderPiece(poseStack, buffer,
-          blockstate.getValue(BedBlock.PART) == BedPart.HEAD ? this.headPiece : this.footPiece,
-          blockstate.getValue(BedBlock.FACING), i, overlay, false, list);
+                       blockstate.getValue(BedBlock.PART) == BedPart.HEAD ? this.headPiece :
+                           this.footPiece,
+                       blockstate.getValue(BedBlock.FACING), i, overlay, false, list);
     } else {
       this.renderPiece(poseStack, buffer, this.headPiece, Direction.SOUTH, light, overlay, false,
-          list);
+                       list);
       this.renderPiece(poseStack, buffer, this.footPiece, Direction.SOUTH, light, overlay, true,
-          list);
+                       list);
     }
   }
 
@@ -97,7 +98,8 @@ public class DecoratedBedBlockEntityRenderer
     poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F + direction.toYRot()));
     poseStack.translate(-0.5D, -0.5D, -0.5D);
     Material material = new Material(Sheets.BANNER_SHEET,
-        new ResourceLocation(BedspreadsConstants.MOD_ID, "entity/bed_base"));
+                                     new ResourceLocation(BedspreadsConstants.MOD_ID,
+                                                          "entity/bed_base"));
 
     if (patterns != null) {
       renderPatterns(poseStack, buffer, light, overlay, modelPart, patterns);
@@ -114,14 +116,20 @@ public class DecoratedBedBlockEntityRenderer
     for (int i = 0; i < 17 && i < patterns.size(); ++i) {
       Pair<Holder<BannerPattern>, DyeColor> pair = patterns.get(i);
       float[] afloat = pair.getSecond().getTextureDiffuseColors();
-      Material patternMaterial = new Material(Sheets.BANNER_SHEET,
-          new ResourceLocation(BedspreadsConstants.MOD_ID,
-              "entity/" + pair.getFirst().unwrapKey().map(key -> {
-                ResourceLocation loc = key.location();
-                return loc.getNamespace() + "/" + loc.getPath();
-              }).orElse("minecraft/base")));
-      modelRenderer.render(poseStack, patternMaterial.buffer(buffer, RenderType::entityTranslucent),
-          light, overlay, afloat[0], afloat[1], afloat[2], 1.0F);
+      String path = "entity/" + pair.getFirst().unwrapKey().map(key -> {
+        ResourceLocation loc = key.location();
+        return loc.getNamespace() + "/" + loc.getPath();
+      }).orElse("minecraft/base");
+      Material patternMaterial =
+          new Material(Sheets.BANNER_SHEET, new ResourceLocation(BedspreadsConstants.MOD_ID, path));
+      TextureAtlasSprite sprite = patternMaterial.sprite();
+      ResourceLocation resourceLocation = sprite.contents().name();
+
+      if (resourceLocation != MissingTextureAtlasSprite.getLocation()) {
+        modelRenderer.render(poseStack,
+                             patternMaterial.buffer(buffer, RenderType::entityTranslucent), light,
+                             overlay, afloat[0], afloat[1], afloat[2], 1.0F);
+      }
     }
   }
 }
