@@ -38,6 +38,11 @@
       "type": "directory",
       "source": "entity/banner/archaeologybanners",
       "prefix": "entity/archaeologybanners/"
-    }	
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/supplementaries",
+      "prefix": "entity/supplementaries/"
+    }
   ]
 }
