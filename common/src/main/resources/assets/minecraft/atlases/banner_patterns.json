@@ -58,6 +58,16 @@
       "type": "directory",
       "source": "entity/banner/neopolitan",
       "prefix": "entity/neopolitan/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/enemybanner",
+      "prefix": "entity/enemybanner/"
+    },
+    {
+      "type": "directory",
+      "source": "entity/banner/twilightforest",
+      "prefix": "entity/twilightforest/"
     }
   ]
 }

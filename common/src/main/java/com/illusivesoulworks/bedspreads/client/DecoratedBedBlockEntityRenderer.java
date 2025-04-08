@@ -17,10 +17,11 @@
 
 package com.illusivesoulworks.bedspreads.client;
 
+import com.illusivesoulworks.bedspreads.BedspreadsCommonMod;
 import com.illusivesoulworks.bedspreads.BedspreadsConstants;
 import com.illusivesoulworks.bedspreads.common.DecoratedBedBlockEntity;
+import com.illusivesoulworks.bedspreads.common.integration.enemybanner.EnemyBannerIntegration;
 import com.illusivesoulworks.bedspreads.common.integration.glowingbanners.GlowingBannersIntegration;
-import com.illusivesoulworks.bedspreads.platform.Services;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -93,7 +94,7 @@ public class DecoratedBedBlockEntityRenderer
 
   private static int getLight(int light, DecoratedBedBlockEntity bedBlockEntity) {
 
-    if (Services.REGISTRY.isModLoaded("glowingbanners") && GlowingBannersIntegration.isGlowing(
+    if (BedspreadsCommonMod.isGlowingBannersLoaded && GlowingBannersIntegration.isGlowing(
         bedBlockEntity)) {
       return 15728880;
     }
@@ -114,7 +115,8 @@ public class DecoratedBedBlockEntityRenderer
                                                           "entity/bed_base"));
 
     if (patterns != null) {
-      renderPatterns(poseStack, buffer, light, overlay, modelPart, patterns);
+      renderPatterns(poseStack, buffer, light, overlay, modelPart, patterns,
+                     modelPart == this.headPiece);
     }
     VertexConsumer ivertexbuilder = material.buffer(buffer, RenderType::entityTranslucent);
     modelPart.render(poseStack, ivertexbuilder, light, overlay);
@@ -123,12 +125,19 @@ public class DecoratedBedBlockEntityRenderer
 
   public static void renderPatterns(PoseStack poseStack, MultiBufferSource buffer, int light,
                                     int overlay, ModelPart modelRenderer,
-                                    List<Pair<Holder<BannerPattern>, DyeColor>> patterns) {
+                                    List<Pair<Holder<BannerPattern>, DyeColor>> patterns,
+                                    boolean isHead) {
+
+    if (BedspreadsCommonMod.isEnemyBannerLoaded && EnemyBannerIntegration.renderEntityBanner(
+        poseStack, modelRenderer, buffer, light, overlay, patterns, isHead)) {
+      return;
+    }
 
     for (int i = 0; i < 17 && i < patterns.size(); ++i) {
       Pair<Holder<BannerPattern>, DyeColor> pair = patterns.get(i);
+      Holder<BannerPattern> pattern = pair.getFirst();
       float[] afloat = pair.getSecond().getTextureDiffuseColors();
-      String path = "entity/" + pair.getFirst().unwrapKey().map(key -> {
+      String path = "entity/" + pattern.unwrapKey().map(key -> {
         ResourceLocation loc = key.location();
         return loc.getNamespace() + "/" + loc.getPath();
       }).orElse("minecraft/base");

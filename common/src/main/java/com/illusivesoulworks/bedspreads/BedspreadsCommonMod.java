@@ -18,10 +18,16 @@
 package com.illusivesoulworks.bedspreads;
 
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
+import com.illusivesoulworks.bedspreads.platform.Services;
 
 public class BedspreadsCommonMod {
 
+  public static boolean isGlowingBannersLoaded = false;
+  public static boolean isEnemyBannerLoaded = false;
+
   public static void init() {
     BedspreadsRegistry.init();
+    isGlowingBannersLoaded = Services.REGISTRY.isModLoaded("glowingbanners");
+    isEnemyBannerLoaded = Services.REGISTRY.isModLoaded("enemybanner");
   }
 }
