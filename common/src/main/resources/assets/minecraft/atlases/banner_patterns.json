@@ -56,8 +56,8 @@
     },
     {
       "type": "directory",
-      "source": "entity/banner/neopolitan",
-      "prefix": "entity/neopolitan/"
+      "source": "entity/banner/neapolitan",
+      "prefix": "entity/neapolitan/"
     },
     {
       "type": "directory",
