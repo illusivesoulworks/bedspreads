@@ -126,7 +126,7 @@ public class DecoratedBedBlockEntityRenderer
         BedspreadsConstants.MOD_ID, "entity/banner/minecraft/base"));
     int newLight = getLight(light, -1, blockEntity);
     modelRenderer.render(poseStack,
-                         baseMaterial.buffer(buffer, RenderType::entityNoOutline),
+                         baseMaterial.buffer(buffer, RenderType::entityTranslucent),
                          newLight, overlay, blockEntity.getBannerColor().getTextureDiffuseColor());
     List<BannerPatternLayers.Layer> layers = patterns.layers();
 
@@ -147,7 +147,7 @@ public class DecoratedBedBlockEntityRenderer
       if (resourceLocation != MissingTextureAtlasSprite.getLocation()) {
         newLight = getLight(light, i, blockEntity);
         modelRenderer.render(poseStack,
-                             patternMaterial.buffer(buffer, RenderType::entityNoOutline),
+                             patternMaterial.buffer(buffer, RenderType::entityTranslucent),
                              newLight, overlay, color);
       }
     }
