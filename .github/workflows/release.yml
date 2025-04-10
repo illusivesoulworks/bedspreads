@@ -9,7 +9,7 @@ jobs:
       options: --user root
     steps:
       - uses: actions/checkout@v4
-      - run: ./gradlew build publish publishFabricForgeNeoForge
+      - run: ./gradlew build publishFabricForgeNeoForge
         env:
           CURSEFORGE_KEY: ${{ secrets.CURSEFORGE_KEY }}
           MODRINTH_KEY: ${{ secrets.MODRINTH_KEY }}
