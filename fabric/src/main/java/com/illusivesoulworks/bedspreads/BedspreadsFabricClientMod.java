@@ -17,20 +17,22 @@
 
 package com.illusivesoulworks.bedspreads;
 
-import com.illusivesoulworks.bedspreads.client.DecoratedBedBlockEntityRenderer;
-import com.illusivesoulworks.bedspreads.client.DecoratedBedFabricItemStackRenderer;
+import com.illusivesoulworks.bedspreads.client.DecoratedBedRenderer;
+import com.illusivesoulworks.bedspreads.client.DecoratedBedSpecialRenderer;
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.special.SpecialModelRenderers;
+import net.minecraft.resources.ResourceLocation;
 
 public class BedspreadsFabricClientMod implements ClientModInitializer {
 
   @Override
   public void onInitializeClient() {
-    BlockEntityRendererRegistry.register(BedspreadsRegistry.DECORATED_BED_BLOCK_ENTITY.get(),
-        DecoratedBedBlockEntityRenderer::new);
-    BuiltinItemRendererRegistry.INSTANCE.register(BedspreadsRegistry.DECORATED_BED_ITEM.get(),
-        new DecoratedBedFabricItemStackRenderer());
+    SpecialModelRenderers.ID_MAPPER.put(
+        ResourceLocation.fromNamespaceAndPath(BedspreadsConstants.MOD_ID, "decorated_bed"),
+        DecoratedBedSpecialRenderer.Unbaked.MAP_CODEC);
+    BlockEntityRenderers.register(BedspreadsRegistry.DECORATED_BED_BLOCK_ENTITY.get(),
+                                  DecoratedBedRenderer::new);
   }
 }

@@ -26,13 +26,12 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class RemovePatternRecipe extends CustomRecipe {
 
   public static final RecipeSerializer<RemovePatternRecipe> CRAFTING_REMOVE_PATTERN =
-      new SimpleCraftingRecipeSerializer<>(RemovePatternRecipe::new);
+      new CustomRecipe.Serializer<>(RemovePatternRecipe::new);
 
   public RemovePatternRecipe(CraftingBookCategory category) {
     super(category);
@@ -98,14 +97,9 @@ public class RemovePatternRecipe extends CustomRecipe {
     return nonnulllist;
   }
 
-  @Override
-  public boolean canCraftInDimensions(int width, int height) {
-    return width * height >= 2;
-  }
-
   @Nonnull
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends CustomRecipe> getSerializer() {
     return CRAFTING_REMOVE_PATTERN;
   }
 }

@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "bedspreads:item/decorated_bed",
+    "model": {
+      "type": "bedspreads:decorated_bed"
+    }
+  }
+}

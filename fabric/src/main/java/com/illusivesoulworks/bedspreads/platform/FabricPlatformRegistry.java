@@ -62,7 +62,7 @@ public class FabricPlatformRegistry implements IPlatformRegistry {
 
   @Override
   public Holder<PoiType> getPoiType(ResourceKey<PoiType> key) {
-    return BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(key);
+    return BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(key).orElse(null);
   }
 
   @Override
@@ -80,7 +80,7 @@ public class FabricPlatformRegistry implements IPlatformRegistry {
     @SuppressWarnings({"unchecked"})
     private Provider(String modId, ResourceKey<? extends Registry<T>> key) {
       this.modId = modId;
-      final Registry<?> reg = BuiltInRegistries.REGISTRY.get(key.location());
+      final Registry<?> reg = BuiltInRegistries.REGISTRY.getValue(key.location());
 
       if (reg == null) {
         throw new RuntimeException("Registry with name " + key.location() + " was not found!");
@@ -119,7 +119,7 @@ public class FabricPlatformRegistry implements IPlatformRegistry {
 
         @Override
         public Holder<I> asHolder() {
-          return (Holder<I>) registry.get((ResourceKey<T>) this.key);
+          return (Holder<I>) registry.get((ResourceKey<T>) this.key).orElse(null);
         }
       };
       entries.add((RegistryObject<T>) ro);

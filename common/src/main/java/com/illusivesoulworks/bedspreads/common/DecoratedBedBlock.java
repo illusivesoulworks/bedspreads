@@ -17,10 +17,14 @@
 
 package com.illusivesoulworks.bedspreads.common;
 
+import com.illusivesoulworks.bedspreads.BedspreadsConstants;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -42,7 +46,10 @@ public class DecoratedBedBlock extends BedBlock {
   public DecoratedBedBlock() {
     super(DyeColor.WHITE,
           Block.Properties.of().mapColor(MapColor.WOOL).ignitedByLava().sound(SoundType.WOOD)
-              .strength(0.2F));
+              .strength(0.2F).setId(ResourceKey.create(Registries.BLOCK,
+                                                       ResourceLocation.fromNamespaceAndPath(
+                                                           BedspreadsConstants.MOD_ID,
+                                                           "decorated_bed"))));
   }
 
   private static Direction getDirectionToOther(BedPart part, Direction facing) {
@@ -58,16 +65,16 @@ public class DecoratedBedBlock extends BedBlock {
   @Nonnull
   @Override
   public ItemStack getCloneItemStack(@Nonnull LevelReader level, @Nonnull BlockPos pos,
-                                     @Nonnull BlockState state) {
+                                     @Nonnull BlockState state, boolean flag) {
     BlockEntity be = level.getBlockEntity(pos);
     return be instanceof DecoratedBedBlockEntity ? ((DecoratedBedBlockEntity) be).getItem() :
-        super.getCloneItemStack(level, pos, state);
+        super.getCloneItemStack(level, pos, state, flag);
   }
 
   @Nonnull
   @Override
   public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state,
-                                @Nonnull Player player) {
+                                      @Nonnull Player player) {
     BedPart bedpart = state.getValue(PART);
     boolean flag = bedpart == BedPart.HEAD;
     BlockPos blockpos = pos.relative(getDirectionToOther(bedpart, state.getValue(FACING)));
@@ -103,7 +110,7 @@ public class DecoratedBedBlock extends BedBlock {
                           @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
     BlockPos blockpos = pos.relative(state.getValue(FACING));
     worldIn.setBlock(blockpos, state.setValue(PART, BedPart.HEAD), 3);
-    worldIn.blockUpdated(pos, Blocks.AIR);
+    worldIn.updateNeighborsAt(pos, Blocks.AIR);
     state.updateNeighbourShapes(worldIn, pos, 3);
     BlockEntity blockentity = worldIn.getBlockEntity(pos);
 

@@ -28,13 +28,12 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class AddPatternRecipe extends CustomRecipe {
 
   public static final RecipeSerializer<AddPatternRecipe> CRAFTING_ADD_PATTERN =
-      new SimpleCraftingRecipeSerializer<>(AddPatternRecipe::new);
+      new CustomRecipe.Serializer<>(AddPatternRecipe::new);
 
   public AddPatternRecipe(CraftingBookCategory category) {
     super(category);
@@ -102,14 +101,9 @@ public class AddPatternRecipe extends CustomRecipe {
     }
   }
 
-  @Override
-  public boolean canCraftInDimensions(int width, int height) {
-    return width * height >= 2;
-  }
-
   @Nonnull
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends CustomRecipe> getSerializer() {
     return CRAFTING_ADD_PATTERN;
   }
 }

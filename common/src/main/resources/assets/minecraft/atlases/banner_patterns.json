@@ -1,71 +1,71 @@
 {
   "sources": [
     {
-      "type": "single",
+      "type": "minecraft:single",
       "resource": "bedspreads:entity/bed_base"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner",
       "prefix": "entity/banner/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/additionalbanners",
       "prefix": "entity/additionalbanners/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/alexsmobs",
       "prefix": "entity/alexsmobs/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/iceandfire",
       "prefix": "entity/iceandfire/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/minecraft",
       "prefix": "entity/minecraft/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/rats",
       "prefix": "entity/rats/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/archaeologybanners",
       "prefix": "entity/archaeologybanners/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/supplementaries",
       "prefix": "entity/supplementaries/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/autumnity",
       "prefix": "entity/autumnity/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/buzzier_bees",
       "prefix": "entity/buzzier_bees/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/neapolitan",
       "prefix": "entity/neapolitan/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/enemybanner",
       "prefix": "entity/enemybanner/"
     },
     {
-      "type": "directory",
+      "type": "minecraft:directory",
       "source": "entity/banner/twilightforest",
       "prefix": "entity/twilightforest/"
     }

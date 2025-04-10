@@ -18,7 +18,6 @@
 package com.illusivesoulworks.bedspreads.platform;
 
 import com.illusivesoulworks.bedspreads.common.DecoratedBedItem;
-import com.illusivesoulworks.bedspreads.common.item.DecoratedBedNeoForgeItem;
 import com.illusivesoulworks.bedspreads.platform.services.IPlatformRegistry;
 import com.illusivesoulworks.bedspreads.registry.RegistryObject;
 import com.illusivesoulworks.bedspreads.registry.RegistryProvider;
@@ -35,6 +34,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.item.BedItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -70,17 +70,17 @@ public class NeoForgePlatformRegistry implements IPlatformRegistry {
   @Override
   public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(
       BiFunction<BlockPos, BlockState, T> builder, Block... blocks) {
-    return BlockEntityType.Builder.of(builder::apply, blocks).build(null);
+    return new BlockEntityType<>(((pos, state) -> builder.apply(pos, state)), Set.of(blocks));
   }
 
   @Override
   public DecoratedBedItem getItem() {
-    return new DecoratedBedNeoForgeItem();
+    return new DecoratedBedItem();
   }
 
   @Override
   public Holder<PoiType> getPoiType(ResourceKey<PoiType> key) {
-    return BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(key).orElse(null);
+    return BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(key).orElse(null);
   }
 
   @Override
@@ -89,6 +89,7 @@ public class NeoForgePlatformRegistry implements IPlatformRegistry {
   }
 
   private static class Provider<T> implements RegistryProvider<T> {
+
     private final String modId;
     private final DeferredRegister<T> registry;
 

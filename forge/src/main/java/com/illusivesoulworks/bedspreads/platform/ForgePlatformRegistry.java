@@ -18,7 +18,6 @@
 package com.illusivesoulworks.bedspreads.platform;
 
 import com.illusivesoulworks.bedspreads.common.DecoratedBedItem;
-import com.illusivesoulworks.bedspreads.common.item.DecoratedBedForgeItem;
 import com.illusivesoulworks.bedspreads.platform.services.IPlatformRegistry;
 import com.illusivesoulworks.bedspreads.registry.RegistryObject;
 import com.illusivesoulworks.bedspreads.registry.RegistryProvider;
@@ -69,12 +68,12 @@ public class ForgePlatformRegistry implements IPlatformRegistry {
   @Override
   public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(
       BiFunction<BlockPos, BlockState, T> builder, Block... blocks) {
-    return BlockEntityType.Builder.of(builder::apply, blocks).build(null);
+    return new BlockEntityType<>(((pos, state) -> builder.apply(pos, state)), Set.of(blocks));
   }
 
   @Override
   public DecoratedBedItem getItem() {
-    return new DecoratedBedForgeItem();
+    return new DecoratedBedItem();
   }
 
   @Override
@@ -88,6 +87,7 @@ public class ForgePlatformRegistry implements IPlatformRegistry {
   }
 
   private static class Provider<T> implements RegistryProvider<T> {
+
     private final String modId;
     private final DeferredRegister<T> registry;
 

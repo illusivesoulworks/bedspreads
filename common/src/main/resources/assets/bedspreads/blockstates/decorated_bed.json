@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "bedspreads:block/decorated_bed" }
+    "": { "model": "minecraft:block/bed" }
   }
 }

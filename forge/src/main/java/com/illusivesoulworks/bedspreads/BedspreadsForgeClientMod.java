@@ -17,8 +17,10 @@
 
 package com.illusivesoulworks.bedspreads;
 
-import com.illusivesoulworks.bedspreads.client.DecoratedBedBlockEntityRenderer;
+import com.illusivesoulworks.bedspreads.client.DecoratedBedRenderer;
+import com.illusivesoulworks.bedspreads.client.DecoratedBedSpecialRenderer;
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
+import net.minecraftforge.client.event.CreateSpecialBlockRendererEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -28,10 +30,16 @@ public class BedspreadsForgeClientMod {
   public static void init() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(BedspreadsForgeClientMod::entityRenderers);
+    eventBus.addListener(BedspreadsForgeClientMod::specialRenderers);
+  }
+
+  public static void specialRenderers(final CreateSpecialBlockRendererEvent evt) {
+    evt.register(BedspreadsRegistry.DECORATED_BED_BLOCK.get(),
+                 new DecoratedBedSpecialRenderer.Unbaked());
   }
 
   public static void entityRenderers(final EntityRenderersEvent.RegisterRenderers evt) {
     evt.registerBlockEntityRenderer(BedspreadsRegistry.DECORATED_BED_BLOCK_ENTITY.get(),
-        DecoratedBedBlockEntityRenderer::new);
+                                    DecoratedBedRenderer::new);
   }
 }

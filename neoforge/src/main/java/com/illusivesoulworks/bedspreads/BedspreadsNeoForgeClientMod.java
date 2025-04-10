@@ -17,22 +17,31 @@
 
 package com.illusivesoulworks.bedspreads;
 
-import com.illusivesoulworks.bedspreads.client.DecoratedBedBlockEntityRenderer;
+import com.illusivesoulworks.bedspreads.client.DecoratedBedRenderer;
+import com.illusivesoulworks.bedspreads.client.DecoratedBedSpecialRenderer;
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 
 @Mod(value = BedspreadsConstants.MOD_ID, dist = Dist.CLIENT)
 public class BedspreadsNeoForgeClientMod {
 
   public BedspreadsNeoForgeClientMod(IEventBus eventBus) {
+    eventBus.addListener(BedspreadsNeoForgeClientMod::specialRenderers);
     eventBus.addListener(BedspreadsNeoForgeClientMod::entityRenderers);
+  }
+
+  public static void specialRenderers(final RegisterSpecialModelRendererEvent evt) {
+    evt.register(ResourceLocation.fromNamespaceAndPath(BedspreadsConstants.MOD_ID, "decorated_bed"),
+                 DecoratedBedSpecialRenderer.Unbaked.MAP_CODEC);
   }
 
   public static void entityRenderers(final EntityRenderersEvent.RegisterRenderers evt) {
     evt.registerBlockEntityRenderer(BedspreadsRegistry.DECORATED_BED_BLOCK_ENTITY.get(),
-                                    DecoratedBedBlockEntityRenderer::new);
+                                    DecoratedBedRenderer::new);
   }
 }

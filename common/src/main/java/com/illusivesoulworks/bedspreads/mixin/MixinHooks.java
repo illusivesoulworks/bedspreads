@@ -46,10 +46,9 @@ public class MixinHooks {
 
   public static boolean containsDecoratedBed(PoiType poiType, BlockState state) {
     initBlockStates();
-    Holder<PoiType> poiTypeHolder =
-        BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.HOME).orElse(null);
+    PoiType type = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getValue(PoiTypes.HOME);
 
-    if (poiTypeHolder != null && poiType == poiTypeHolder.value()) {
+    if (type != null && poiType == type) {
       return DECORATED_BED_STATES.contains(state);
     }
     return false;
@@ -57,11 +56,11 @@ public class MixinHooks {
 
   public static Optional<Holder<PoiType>> containsDecoratedBed(BlockState state) {
     initBlockStates();
-    Holder<PoiType> poiTypeHolder =
-        BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(PoiTypes.HOME).orElse(null);
+    Holder<PoiType> poiType =
+        BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(PoiTypes.HOME).orElse(null);
 
-    if (poiTypeHolder != null && DECORATED_BED_STATES.contains(state)) {
-      return Optional.of(poiTypeHolder);
+    if (poiType != null && DECORATED_BED_STATES.contains(state)) {
+      return Optional.of(poiType);
     }
     return Optional.empty();
   }
