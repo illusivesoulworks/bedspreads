@@ -2,6 +2,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/bedspreads/blob/1.21.1/CHANGELOG.md).
 
-## [7.0.0+1.21.1] - 2024.04.09
+## [9.0.0+1.21.5] - 2024.04.10
 ### Changed
-- Updated to Minecraft 1.21.1
+- Updated to Minecraft 1.21.5
