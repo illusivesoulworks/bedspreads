@@ -9,7 +9,6 @@ plugins {
 }
 
 mixin {
-    config("${mod_id}.forge.mixins.json")
     config("${mod_id}.mixins.json")
 }
 
