@@ -58,7 +58,7 @@ public class DecoratedBedRenderer implements BlockEntityRenderer<DecoratedBedBlo
 
   public void render(
       DecoratedBedBlockEntity blockEntity, float tickDelta, @Nonnull PoseStack poseStack,
-      @Nonnull MultiBufferSource bufferSource, int light, int overlay, @Nonnull Vec3 vec3
+      @Nonnull MultiBufferSource bufferSource, int light, int overlay
   ) {
     Level level = blockEntity.getLevel();
 
@@ -143,7 +143,7 @@ public class DecoratedBedRenderer implements BlockEntityRenderer<DecoratedBedBlo
     Material baseMaterial = new Material(Sheets.BANNER_SHEET, ResourceLocation.fromNamespaceAndPath(
         BedspreadsConstants.MOD_ID, "entity/banner/minecraft/base"));
     modelRenderer.renderToBuffer(poseStack,
-                                 baseMaterial.buffer(buffer, RenderType::entitySolid), light,
+                                 baseMaterial.buffer(buffer, RenderType::entityNoOutline), light,
                                  overlay, color);
     List<BannerPatternLayers.Layer> layers = patterns.layers();
 

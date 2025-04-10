@@ -70,10 +70,10 @@ public class DecoratedBedBlockEntity extends BlockEntity {
   @Override
   public void loadAdditional(@Nonnull CompoundTag compound,
                              @Nonnull HolderLookup.Provider provider) {
-    this.bed =
-        ItemStack.parse(provider, compound.getCompoundOrEmpty("BedStack")).orElse(ItemStack.EMPTY);
-    this.banner = ItemStack.parse(provider, compound.getCompoundOrEmpty("BannerStack"))
-        .orElse(ItemStack.EMPTY);
+    this.bed = compound.contains("BedStack") ?
+        ItemStack.parseOptional(provider, compound.getCompound("BedStack")) : ItemStack.EMPTY;
+    this.banner = compound.contains("BannerStack") ?
+        ItemStack.parseOptional(provider, compound.getCompound("BannerStack")) : ItemStack.EMPTY;
 
     if (!this.banner.isEmpty()) {
       this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);

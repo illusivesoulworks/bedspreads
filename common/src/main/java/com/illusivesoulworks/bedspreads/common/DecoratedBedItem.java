@@ -18,7 +18,11 @@
 package com.illusivesoulworks.bedspreads.common;
 
 import com.illusivesoulworks.bedspreads.BedspreadsConstants;
+import java.util.List;
+import javax.annotation.Nonnull;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BannerItem;
@@ -26,6 +30,7 @@ import net.minecraft.world.item.BedItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.AbstractBannerBlock;
 
 public class DecoratedBedItem extends BedItem {
@@ -70,5 +75,22 @@ public class DecoratedBedItem extends BedItem {
     return DyeColor.WHITE;
   }
 
+  @Override
+  public void appendHoverText(@Nonnull ItemStack stack, @Nonnull TooltipContext tooltipContext,
+                              @Nonnull List<Component> components,
+                              @Nonnull TooltipFlag tooltipFlag) {
+    ItemStack bed = getBedStack(stack);
+    ItemStack banner = getBannerStack(stack);
 
+    if (!bed.isEmpty()) {
+      components.add(
+          Component.translatable(bed.getItem().getDescriptionId()).withStyle(ChatFormatting.GRAY));
+    }
+
+    if (!banner.isEmpty()) {
+      components.add(Component.translatable(banner.getItem().getDescriptionId())
+                         .withStyle(ChatFormatting.GRAY));
+      BannerItem.appendHoverTextFromBannerBlockEntityTag(banner, components);
+    }
+  }
 }
