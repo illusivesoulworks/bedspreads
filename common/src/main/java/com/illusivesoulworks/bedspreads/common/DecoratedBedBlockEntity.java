@@ -17,18 +17,15 @@
 
 package com.illusivesoulworks.bedspreads.common;
 
-import com.mojang.datafixers.util.Pair;
-import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BannerBlockEntity;
-import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -37,9 +34,7 @@ public class DecoratedBedBlockEntity extends BlockEntity {
   private ItemStack bed = ItemStack.EMPTY;
   private ItemStack banner = ItemStack.EMPTY;
   private DyeColor bannerColor = DyeColor.WHITE;
-  private ListTag patterns;
-  private boolean patternDataSet;
-  private List<Pair<Holder<BannerPattern>, DyeColor>> patternList;
+  private BannerPatternLayers patterns;
 
   public DecoratedBedBlockEntity(BlockPos pos, BlockState state) {
     super(BedspreadsRegistry.DECORATED_BED_BLOCK_ENTITY.get(), pos, state);
@@ -47,53 +42,43 @@ public class DecoratedBedBlockEntity extends BlockEntity {
 
   public void loadFromItemStack(ItemStack stack) {
     this.patterns = null;
-    CompoundTag nbttagcompound = stack.getTagElement("BlockEntityTag");
+    BedspreadsData data = stack.get(BedspreadsRegistry.BEDSPREADS_DATA.get());
 
-    if (nbttagcompound != null) {
-      this.bed = ItemStack.of(nbttagcompound.getCompound("BedStack"));
-      this.banner = ItemStack.of(nbttagcompound.getCompound("BannerStack"));
+    if (data != null) {
+      this.bed = data.bed().copy();
+      this.banner = data.banner().copy();
 
       if (!this.banner.isEmpty()) {
         this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);
       }
     }
-    CompoundTag bannernbt = banner.getTagElement("BlockEntityTag");
-
-    if (bannernbt != null && bannernbt.contains("Patterns", 9)) {
-      this.patterns = bannernbt.getList("Patterns", 10).copy();
-    }
-    this.patternList = null;
-    this.patternDataSet = true;
+    this.patterns = banner.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
   }
 
   @Override
-  protected void saveAdditional(@Nonnull CompoundTag pTag) {
+  protected void saveAdditional(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider provider) {
 
     if (!this.bed.isEmpty()) {
-      pTag.put("BedStack", this.bed.save(new CompoundTag()));
+      tag.put("BedStack", this.bed.save(provider, new CompoundTag()));
     }
 
     if (!this.banner.isEmpty()) {
-      pTag.put("BannerStack", this.banner.save(new CompoundTag()));
+      tag.put("BannerStack", this.banner.save(provider, new CompoundTag()));
     }
   }
 
   @Override
-  public void load(@Nonnull CompoundTag compound) {
-    super.load(compound);
-    this.bed = compound.contains("BedStack") ? ItemStack.of(compound.getCompound("BedStack"))
-        : ItemStack.EMPTY;
-    this.banner =
-        compound.contains("BannerStack") ? ItemStack.of(compound.getCompound("BannerStack"))
-            : ItemStack.EMPTY;
+  public void loadAdditional(@Nonnull CompoundTag compound,
+                             @Nonnull HolderLookup.Provider provider) {
+    this.bed = compound.contains("BedStack") ?
+        ItemStack.parseOptional(provider, compound.getCompound("BedStack")) : ItemStack.EMPTY;
+    this.banner = compound.contains("BannerStack") ?
+        ItemStack.parseOptional(provider, compound.getCompound("BannerStack")) : ItemStack.EMPTY;
 
     if (!this.banner.isEmpty()) {
       this.bannerColor = DecoratedBedItem.getBannerColor(this.banner);
     }
-    CompoundTag bannernbt = banner.getTagElement("BlockEntityTag");
-    this.patterns = bannernbt != null ? bannernbt.getList("Patterns", 10).copy() : null;
-    this.patternList = null;
-    this.patternDataSet = true;
+    this.patterns = banner.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
   }
 
   @Override
@@ -103,38 +88,28 @@ public class DecoratedBedBlockEntity extends BlockEntity {
 
   @Nonnull
   @Override
-  public CompoundTag getUpdateTag() {
+  public CompoundTag getUpdateTag(@Nonnull HolderLookup.Provider provider) {
     CompoundTag tag = new CompoundTag();
-    this.saveAdditional(tag);
+    this.saveAdditional(tag, provider);
     return tag;
   }
 
-  public List<Pair<Holder<BannerPattern>, DyeColor>> getPatternList() {
-    if (this.patternList == null && this.patternDataSet) {
-      this.patternList = BannerBlockEntity.createPatterns(this.getBannerColor(), this.patterns);
-    }
-    return this.patternList;
+  public BannerPatternLayers getPatternList() {
+    return this.patterns;
   }
 
   public ItemStack getItem() {
     ItemStack itemstack = new ItemStack(BedspreadsRegistry.DECORATED_BED_ITEM.get());
-    CompoundTag compound = itemstack.getOrCreateTagElement("BlockEntityTag");
-
-    if (!this.bed.isEmpty()) {
-      compound.put("BedStack", this.bed.save(new CompoundTag()));
-    }
-
-    if (!this.banner.isEmpty()) {
-      compound.put("BannerStack", this.banner.save(new CompoundTag()));
-    }
+    itemstack.set(BedspreadsRegistry.BEDSPREADS_DATA.get(),
+                  new BedspreadsData(this.bed.copy(), this.banner.copy()));
     return itemstack;
-  }
-
-  public DyeColor getBannerColor() {
-    return this.bannerColor;
   }
 
   public ItemStack getBanner() {
     return this.banner;
+  }
+
+  public DyeColor getBannerColor() {
+    return this.bannerColor;
   }
 }

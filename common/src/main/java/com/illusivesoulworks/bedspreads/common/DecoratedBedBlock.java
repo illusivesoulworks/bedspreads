@@ -26,8 +26,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -41,14 +41,15 @@ public class DecoratedBedBlock extends BedBlock {
 
   public DecoratedBedBlock() {
     super(DyeColor.WHITE,
-        Block.Properties.of().mapColor(MapColor.WOOL).ignitedByLava().sound(SoundType.WOOD)
-            .strength(0.2F));
+          Block.Properties.of().mapColor(MapColor.WOOL).ignitedByLava().sound(SoundType.WOOD)
+              .strength(0.2F));
   }
 
   private static Direction getDirectionToOther(BedPart part, Direction facing) {
     return part == BedPart.FOOT ? facing : facing.getOpposite();
   }
 
+  @Nonnull
   @Override
   public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
     return new DecoratedBedBlockEntity(pos, state);
@@ -56,15 +57,16 @@ public class DecoratedBedBlock extends BedBlock {
 
   @Nonnull
   @Override
-  public ItemStack getCloneItemStack(@Nonnull BlockGetter level, @Nonnull BlockPos pos,
+  public ItemStack getCloneItemStack(@Nonnull LevelReader level, @Nonnull BlockPos pos,
                                      @Nonnull BlockState state) {
     BlockEntity be = level.getBlockEntity(pos);
     return be instanceof DecoratedBedBlockEntity ? ((DecoratedBedBlockEntity) be).getItem() :
         super.getCloneItemStack(level, pos, state);
   }
 
+  @Nonnull
   @Override
-  public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state,
+  public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state,
                                 @Nonnull Player player) {
     BedPart bedpart = state.getValue(PART);
     boolean flag = bedpart == BedPart.HEAD;
@@ -93,7 +95,7 @@ public class DecoratedBedBlock extends BedBlock {
       }
       player.awardStat(Stats.BLOCK_MINED.get(this));
     }
-    super.playerWillDestroy(worldIn, pos, state, player);
+    return super.playerWillDestroy(worldIn, pos, state, player);
   }
 
   @Override

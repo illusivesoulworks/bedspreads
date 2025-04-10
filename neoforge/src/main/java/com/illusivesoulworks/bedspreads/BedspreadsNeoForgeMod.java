@@ -17,12 +17,13 @@
 
 package com.illusivesoulworks.bedspreads;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
 
-public class BedspreadsConstants {
+@Mod(BedspreadsConstants.MOD_ID)
+public class BedspreadsNeoForgeMod {
 
-  public static final String MOD_ID = "bedspreads";
-  public static final String MOD_NAME = "Bedspreads";
-  public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+  public BedspreadsNeoForgeMod(IEventBus eventBus) {
+    BedspreadsCommonMod.init();
+  }
 }

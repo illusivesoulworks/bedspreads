@@ -19,12 +19,11 @@ package com.illusivesoulworks.bedspreads.common.recipe;
 
 import com.illusivesoulworks.bedspreads.common.DecoratedBedItem;
 import javax.annotation.Nonnull;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
@@ -35,15 +34,15 @@ public class RemovePatternRecipe extends CustomRecipe {
   public static final RecipeSerializer<RemovePatternRecipe> CRAFTING_REMOVE_PATTERN =
       new SimpleCraftingRecipeSerializer<>(RemovePatternRecipe::new);
 
-  public RemovePatternRecipe(ResourceLocation id, CraftingBookCategory category) {
-    super(id, category);
+  public RemovePatternRecipe(CraftingBookCategory category) {
+    super(category);
   }
 
   @Override
-  public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
+  public boolean matches(@Nonnull CraftingInput inv, @Nonnull Level level) {
     ItemStack itemstack = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getContainerSize(); i++) {
+    for (int i = 0; i < inv.size(); i++) {
       ItemStack stack = inv.getItem(i);
 
       if (!stack.isEmpty()) {
@@ -60,11 +59,11 @@ public class RemovePatternRecipe extends CustomRecipe {
 
   @Nonnull
   @Override
-  public ItemStack assemble(@Nonnull CraftingContainer inv,
-                            @Nonnull RegistryAccess registryAccess) {
+  public ItemStack assemble(@Nonnull CraftingInput inv,
+                            @Nonnull HolderLookup.Provider provider) {
     ItemStack itemstack = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getContainerSize(); ++i) {
+    for (int i = 0; i < inv.size(); ++i) {
       ItemStack stack = inv.getItem(i);
 
       if (!stack.isEmpty()) {
@@ -85,9 +84,9 @@ public class RemovePatternRecipe extends CustomRecipe {
 
   @Nonnull
   @Override
-  public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
+  public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
     NonNullList<ItemStack> nonnulllist = NonNullList
-        .withSize(inv.getContainerSize(), ItemStack.EMPTY);
+        .withSize(inv.size(), ItemStack.EMPTY);
 
     for (int i = 0; i < nonnulllist.size(); ++i) {
       ItemStack item = inv.getItem(i);

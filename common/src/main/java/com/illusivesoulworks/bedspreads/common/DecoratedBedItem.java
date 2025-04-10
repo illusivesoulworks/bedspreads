@@ -19,9 +19,7 @@ package com.illusivesoulworks.bedspreads.common;
 
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.BedItem;
@@ -29,7 +27,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractBannerBlock;
 
 public class DecoratedBedItem extends BedItem {
@@ -41,10 +38,10 @@ public class DecoratedBedItem extends BedItem {
   public static ItemStack getBedStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      CompoundTag compound = stack.getTagElement("BlockEntityTag");
+      BedspreadsData data = stack.get(BedspreadsRegistry.BEDSPREADS_DATA.get());
 
-      if (compound != null) {
-        return ItemStack.of(compound.getCompound("BedStack"));
+      if (data != null) {
+        return data.bed().copy();
       }
     }
     return ItemStack.EMPTY;
@@ -53,10 +50,10 @@ public class DecoratedBedItem extends BedItem {
   public static ItemStack getBannerStack(ItemStack stack) {
 
     if (stack.getItem() instanceof DecoratedBedItem) {
-      CompoundTag compound = stack.getTagElement("BlockEntityTag");
+      BedspreadsData data = stack.get(BedspreadsRegistry.BEDSPREADS_DATA.get());
 
-      if (compound != null) {
-        return ItemStack.of(compound.getCompound("BannerStack"));
+      if (data != null) {
+        return data.banner().copy();
       }
     }
 
@@ -72,18 +69,21 @@ public class DecoratedBedItem extends BedItem {
   }
 
   @Override
-  public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level level,
-                              @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
+  public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Item.TooltipContext context,
+                              @Nonnull List<Component> tooltipComponents,
+                              @Nonnull TooltipFlag tooltipFlag) {
     ItemStack bed = getBedStack(stack);
     ItemStack banner = getBannerStack(stack);
 
     if (!bed.isEmpty()) {
-      tooltip.add(Component.translatable(bed.getDescriptionId()).withStyle(ChatFormatting.GRAY));
+      tooltipComponents.add(
+          Component.translatable(bed.getDescriptionId()).withStyle(ChatFormatting.GRAY));
     }
 
     if (!banner.isEmpty()) {
-      tooltip.add(Component.translatable(banner.getDescriptionId()).withStyle(ChatFormatting.GRAY));
-      BannerItem.appendHoverTextFromBannerBlockEntityTag(banner, tooltip);
+      tooltipComponents.add(
+          Component.translatable(banner.getDescriptionId()).withStyle(ChatFormatting.GRAY));
+      BannerItem.appendHoverTextFromBannerBlockEntityTag(banner, tooltipComponents);
     }
   }
 }

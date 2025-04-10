@@ -23,6 +23,8 @@ import com.illusivesoulworks.bedspreads.common.recipe.RemovePatternRecipe;
 import com.illusivesoulworks.bedspreads.platform.Services;
 import com.illusivesoulworks.bedspreads.registry.RegistryObject;
 import com.illusivesoulworks.bedspreads.registry.RegistryProvider;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -43,6 +45,8 @@ public class BedspreadsRegistry {
       RegistryProvider.get(BuiltInRegistries.BLOCK_ENTITY_TYPE, BedspreadsConstants.MOD_ID);
   public static final RegistryProvider<RecipeSerializer<?>> RECIPE_SERIALIZERS =
       RegistryProvider.get(BuiltInRegistries.RECIPE_SERIALIZER, BedspreadsConstants.MOD_ID);
+  public static final RegistryProvider<DataComponentType<?>> DATA_COMPONENT_TYPES =
+      RegistryProvider.get(BuiltInRegistries.DATA_COMPONENT_TYPE, BedspreadsConstants.MOD_ID);
 
   public static final RegistryObject<Block> DECORATED_BED_BLOCK =
       BLOCKS.register(DECORATED_BED, DecoratedBedBlock::new);
@@ -57,6 +61,8 @@ public class BedspreadsRegistry {
   public static final RegistryObject<RecipeSerializer<?>> REMOVE_PATTERN_RECIPE =
       RECIPE_SERIALIZERS.register(REMOVE_PATTERN,
           () -> RemovePatternRecipe.CRAFTING_REMOVE_PATTERN);
+  public static final RegistryObject<DataComponentType<BedspreadsData>> BEDSPREADS_DATA =
+      DATA_COMPONENT_TYPES.register(DECORATED_BED, () -> BedspreadsData.TYPE);
 
   public static void init() {
     // NO-OP

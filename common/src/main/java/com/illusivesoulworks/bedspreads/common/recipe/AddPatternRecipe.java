@@ -17,16 +17,15 @@
 
 package com.illusivesoulworks.bedspreads.common.recipe;
 
+import com.illusivesoulworks.bedspreads.common.BedspreadsData;
 import com.illusivesoulworks.bedspreads.common.BedspreadsRegistry;
 import javax.annotation.Nonnull;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.BedItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
@@ -37,16 +36,16 @@ public class AddPatternRecipe extends CustomRecipe {
   public static final RecipeSerializer<AddPatternRecipe> CRAFTING_ADD_PATTERN =
       new SimpleCraftingRecipeSerializer<>(AddPatternRecipe::new);
 
-  public AddPatternRecipe(ResourceLocation id, CraftingBookCategory category) {
-    super(id, category);
+  public AddPatternRecipe(CraftingBookCategory category) {
+    super(category);
   }
 
   @Override
-  public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
+  public boolean matches(@Nonnull CraftingInput inv, @Nonnull Level level) {
     ItemStack itemstack = ItemStack.EMPTY;
     ItemStack itemstack1 = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getContainerSize(); ++i) {
+    for (int i = 0; i < inv.size(); ++i) {
       ItemStack stack = inv.getItem(i);
 
       if (!stack.isEmpty()) {
@@ -75,12 +74,12 @@ public class AddPatternRecipe extends CustomRecipe {
 
   @Nonnull
   @Override
-  public ItemStack assemble(@Nonnull CraftingContainer inv,
-                            @Nonnull RegistryAccess registryAccess) {
+  public ItemStack assemble(@Nonnull CraftingInput inv,
+                            @Nonnull HolderLookup.Provider provider) {
     ItemStack itemstack = ItemStack.EMPTY;
     ItemStack itemstack1 = ItemStack.EMPTY;
 
-    for (int i = 0; i < inv.getContainerSize(); ++i) {
+    for (int i = 0; i < inv.size(); ++i) {
       ItemStack stack = inv.getItem(i);
 
       if (!stack.isEmpty()) {
@@ -97,9 +96,8 @@ public class AddPatternRecipe extends CustomRecipe {
       return ItemStack.EMPTY;
     } else {
       ItemStack stack = new ItemStack(BedspreadsRegistry.DECORATED_BED_ITEM.get());
-      CompoundTag nbttagcompound = stack.getOrCreateTagElement("BlockEntityTag");
-      nbttagcompound.put("BannerStack", itemstack.save(new CompoundTag()));
-      nbttagcompound.put("BedStack", itemstack1.save(new CompoundTag()));
+      stack.set(BedspreadsRegistry.BEDSPREADS_DATA.get(),
+                new BedspreadsData(itemstack1.copy(), itemstack.copy()));
       return stack;
     }
   }

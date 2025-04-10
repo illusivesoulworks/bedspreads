@@ -20,11 +20,9 @@ package com.illusivesoulworks.bedspreads.client;
 import com.illusivesoulworks.bedspreads.BedspreadsCommonMod;
 import com.illusivesoulworks.bedspreads.BedspreadsConstants;
 import com.illusivesoulworks.bedspreads.common.DecoratedBedBlockEntity;
-import com.illusivesoulworks.bedspreads.common.integration.enemybanner.EnemyBannerIntegration;
 import com.illusivesoulworks.bedspreads.common.integration.glowingbanners.GlowingBannersIntegration;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -42,12 +40,12 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -67,7 +65,7 @@ public class DecoratedBedBlockEntityRenderer
   public void render(@Nonnull DecoratedBedBlockEntity blockEntity, float partialTicks,
                      @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer,
                      int light, int overlay) {
-    List<Pair<Holder<BannerPattern>, DyeColor>> list = blockEntity.getPatternList();
+    BannerPatternLayers list = blockEntity.getPatternList();
     Level world = blockEntity.getLevel();
 
     if (world != null) {
@@ -78,24 +76,23 @@ public class DecoratedBedBlockEntityRenderer
                                                   ChestBlock.FACING, blockstate, world,
                                                   blockEntity.getBlockPos(),
                                                   (levelAccessor, blockPos) -> false);
-      int newLight = getLight(light, blockEntity);
-      int i = icallbackwrapper.apply(new BrightnessCombiner<>()).get(newLight);
+      int i = icallbackwrapper.apply(new BrightnessCombiner<>()).get(light);
       this.renderPiece(poseStack, buffer,
                        blockstate.getValue(BedBlock.PART) == BedPart.HEAD ? this.headPiece :
                            this.footPiece,
-                       blockstate.getValue(BedBlock.FACING), i, overlay, false, list);
+                       blockstate.getValue(BedBlock.FACING), i, overlay, false, list, blockEntity);
     } else {
       this.renderPiece(poseStack, buffer, this.headPiece, Direction.SOUTH, light, overlay, false,
-                       list);
+                       list, blockEntity);
       this.renderPiece(poseStack, buffer, this.footPiece, Direction.SOUTH, light, overlay, true,
-                       list);
+                       list, blockEntity);
     }
   }
 
-  private static int getLight(int light, DecoratedBedBlockEntity bedBlockEntity) {
+  private static int getLight(int light, int layer, DecoratedBedBlockEntity bedBlockEntity) {
 
     if (BedspreadsCommonMod.isGlowingBannersLoaded && GlowingBannersIntegration.isGlowing(
-        bedBlockEntity)) {
+        bedBlockEntity, layer)) {
       return 15728880;
     }
     return light;
@@ -103,20 +100,18 @@ public class DecoratedBedBlockEntityRenderer
 
   private void renderPiece(PoseStack poseStack, MultiBufferSource buffer, ModelPart modelPart,
                            Direction direction, int light, int overlay, boolean isHead,
-                           List<Pair<Holder<BannerPattern>, DyeColor>> patterns) {
+                           BannerPatternLayers patterns, DecoratedBedBlockEntity blockEntity) {
     poseStack.pushPose();
     poseStack.translate(0.0D, 0.5625D, isHead ? -1.0D : 0.0D);
     poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
     poseStack.translate(0.5D, 0.5D, 0.5D);
     poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F + direction.toYRot()));
     poseStack.translate(-0.5D, -0.5D, -0.5D);
-    Material material = new Material(Sheets.BANNER_SHEET,
-                                     new ResourceLocation(BedspreadsConstants.MOD_ID,
-                                                          "entity/bed_base"));
+    Material material = new Material(Sheets.BANNER_SHEET, ResourceLocation.fromNamespaceAndPath(
+        BedspreadsConstants.MOD_ID, "entity/bed_base"));
 
     if (patterns != null) {
-      renderPatterns(poseStack, buffer, light, overlay, modelPart, patterns,
-                     modelPart == this.headPiece);
+      renderPatterns(poseStack, buffer, light, overlay, modelPart, patterns, blockEntity);
     }
     VertexConsumer ivertexbuilder = material.buffer(buffer, RenderType::entityTranslucent);
     modelPart.render(poseStack, ivertexbuilder, light, overlay);
@@ -125,31 +120,35 @@ public class DecoratedBedBlockEntityRenderer
 
   public static void renderPatterns(PoseStack poseStack, MultiBufferSource buffer, int light,
                                     int overlay, ModelPart modelRenderer,
-                                    List<Pair<Holder<BannerPattern>, DyeColor>> patterns,
-                                    boolean isHead) {
+                                    BannerPatternLayers patterns,
+                                    DecoratedBedBlockEntity blockEntity) {
+    Material baseMaterial = new Material(Sheets.BANNER_SHEET, ResourceLocation.fromNamespaceAndPath(
+        BedspreadsConstants.MOD_ID, "entity/banner/minecraft/base"));
+    int newLight = getLight(light, -1, blockEntity);
+    modelRenderer.render(poseStack,
+                         baseMaterial.buffer(buffer, RenderType::entityNoOutline),
+                         newLight, overlay, blockEntity.getBannerColor().getTextureDiffuseColor());
+    List<BannerPatternLayers.Layer> layers = patterns.layers();
 
-    if (BedspreadsCommonMod.isEnemyBannerLoaded && EnemyBannerIntegration.renderEntityBanner(
-        poseStack, modelRenderer, buffer, light, overlay, patterns, isHead)) {
-      return;
-    }
-
-    for (int i = 0; i < 17 && i < patterns.size(); ++i) {
-      Pair<Holder<BannerPattern>, DyeColor> pair = patterns.get(i);
-      Holder<BannerPattern> pattern = pair.getFirst();
-      float[] afloat = pair.getSecond().getTextureDiffuseColors();
+    for (int i = 0; i < 16 && i < layers.size(); ++i) {
+      BannerPatternLayers.Layer layer = layers.get(i);
+      Holder<BannerPattern> pattern = layer.pattern();
+      int color = layer.color().getTextureDiffuseColor();
       String path = "entity/" + pattern.unwrapKey().map(key -> {
         ResourceLocation loc = key.location();
         return loc.getNamespace() + "/" + loc.getPath();
       }).orElse("minecraft/base");
-      Material patternMaterial =
-          new Material(Sheets.BANNER_SHEET, new ResourceLocation(BedspreadsConstants.MOD_ID, path));
+      Material patternMaterial = new Material(Sheets.BANNER_SHEET,
+                                              ResourceLocation.fromNamespaceAndPath(
+                                                  BedspreadsConstants.MOD_ID, path));
       TextureAtlasSprite sprite = patternMaterial.sprite();
       ResourceLocation resourceLocation = sprite.contents().name();
 
       if (resourceLocation != MissingTextureAtlasSprite.getLocation()) {
+        newLight = getLight(light, i, blockEntity);
         modelRenderer.render(poseStack,
-                             patternMaterial.buffer(buffer, RenderType::entityTranslucent), light,
-                             overlay, afloat[0], afloat[1], afloat[2], 1.0F);
+                             patternMaterial.buffer(buffer, RenderType::entityNoOutline),
+                             newLight, overlay, color);
       }
     }
   }
