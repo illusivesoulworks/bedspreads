@@ -18,7 +18,10 @@
 package com.illusivesoulworks.bedspreads.common;
 
 import com.illusivesoulworks.bedspreads.BedspreadsConstants;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BannerItem;
@@ -26,6 +29,8 @@ import net.minecraft.world.item.BedItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.AbstractBannerBlock;
 
 public class DecoratedBedItem extends BedItem {
@@ -70,5 +75,12 @@ public class DecoratedBedItem extends BedItem {
     return DyeColor.WHITE;
   }
 
-
+  @Override
+  public void appendHoverText(@Nonnull ItemStack stack, @Nonnull TooltipContext context,
+                              @Nonnull TooltipDisplay display,
+                              @Nonnull Consumer<Component> componentConsumer,
+                              @Nonnull TooltipFlag flag) {
+    stack.addToTooltip(BedspreadsRegistry.BEDSPREADS_DATA.get(), context, display,
+                       componentConsumer, flag);
+  }
 }
